@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form enctype="multipart/form-data" method="post">
+        <div>
+            <label for="uploadVideo">동영상 업로드</label>
+            <input type="file" id="uploadVideo" name="videoFile">
+            <img src="dsa" alt="동영상 thumbnail">
+        </div>
+        <input type="submit" value="upload">
+    </form>
+</body>
+</html>
+
+<script>
+
+window.addEventListener('load', ()=>{
+    const formTag = document.querySelector('form');
+    formTag.onsubmit = uploadVideoHandler;
+})
+
+function uploadVideoHandler(e){
+    const formTag = document.querySelector('form');
+    e.preventDefault();
+    const formData = new FormData(formTag);
+    console.log(formData);
+    const option = {
+        method:'POST',
+        body:formData,
+    }
+    fetch('video',option)
+    .then(res=>console.log(res));
+}
+</script>

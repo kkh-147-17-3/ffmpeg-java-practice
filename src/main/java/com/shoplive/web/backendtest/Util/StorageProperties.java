@@ -2,22 +2,20 @@ package com.shoplive.web.backendtest.Util;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * StorageProperties
  */
 @ConfigurationProperties(prefix = "file")
+@Getter
+@Setter
 public class StorageProperties {
 
     /**
      * Folder location for storing files
      */
-    private String uploadDir;
-
-    public String getUploadDir() {
-        return uploadDir;
-    }
-
-    public void setUploadDir(String uploadDir) {
-        this.uploadDir = uploadDir;
-    }
+    private String videoUploadDir;
+    private String thumbnailUploadDir;
 }

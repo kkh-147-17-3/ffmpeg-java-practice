@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.Exception;
+package com.shoplive.web.backendtest.exception;
 
 import lombok.NoArgsConstructor;
 

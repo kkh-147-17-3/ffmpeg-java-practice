@@ -7,34 +7,78 @@
     <title>Document</title>
 </head>
 <body>
-    <form enctype="multipart/form-data" method="post">
+    <div id="upload-video">
         <div>
-            <label for="uploadVideo">동영상 업로드</label>
-            <input type="file" id="uploadVideo" name="videoFile">
-            <img src="dsa" alt="동영상 thumbnail">
+            <label for="input-video">동영상 업로드</label>
+            <input type="file" id="input-video" name="video-file">
+            <label for="input-title">동영상 제목</label>
+            <input type="text" id="input-title" name="title">
         </div>
-        <input type="submit" value="upload">
-    </form>
+        <input type="button" value="upload">
+    </div>
+    <fieldset style="margin-top:100px; width: 1200px; height: 300px;">
+        <legend>업로드 결과</legend>
+        <div style="display:flex; width:100%; column-gap:100px; justify-content:center;">
+            <div>
+                업로드 썸네일
+                <img width="300" src="/default-image.png" alt="동영상 thumbnail">
+            </div>
+            <div>
+                업로드 원본 영상
+                <video width="300" controls id="original-video">
+                    <source src="#" id="original-source" type="video/mp4">
+                </video> 
+            </div>
+            
+            <div>
+                업로드 리자이징 영상
+                <video width="300" controls id="resized-video">
+                    <source src="#" id="resized-source" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </fieldset>
 </body>
 </html>
 
 <script>
 
 window.addEventListener('load', ()=>{
-    const formTag = document.querySelector('form');
-    formTag.onsubmit = uploadVideoHandler;
+    const btn = document.querySelector('input[type="button"]');
+    btn.onclick = uploadVideoHandler;
 })
 
 function uploadVideoHandler(e){
-    const formTag = document.querySelector('form');
-    e.preventDefault();
-    const formData = new FormData(formTag);
-    console.log(formData);
+    const videoInput = document.querySelector('input[type="file"]');
+    const titleInput = document.querySelector('#input-title');
+    const img = document.querySelector('img');
+    const originalVideo = document.querySelector('#original-video');
+    const resizedVideo = document.querySelector('#resized-video');
+
+    const originalSrc = document.querySelector('#original-source');
+    const resizedSrc = document.querySelector('#resized-source');
+    const formData = new FormData();
+    formData.append('videoFile', videoInput.files[0]);
+    formData.append('metaInfo', new Blob([JSON.stringify(
+        {
+        title:titleInput.value,
+    })], {
+        type: "application/json"
+    }));
     const option = {
         method:'POST',
         body:formData,
     }
     fetch('video',option)
-    .then(res=>console.log(res));
+    .then(res=>res.json())
+    .then(data=>{
+        const id = data.id;
+        setInterval(()=>requestProgress(id),2000);
+    });
+}
+function requestProgress(id){
+    fetch('/video/'+id)
+    .then(res=>res.json())
+    .then(data=>console.log(data));
 }
 </script>

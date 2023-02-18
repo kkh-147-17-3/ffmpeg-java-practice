@@ -1,16 +1,25 @@
-package com.shoplive.web.backendtest.Controller;
+package com.shoplive.web.backendtest.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.shoplive.web.backendtest.Service.VideoUploadService;
+import com.shoplive.web.backendtest.dto.VideoUploadRequestDto;
+import com.shoplive.web.backendtest.exception.VideoUploadException;
+import com.shoplive.web.backendtest.service.Video.VideoService;
+import com.shoplive.web.backendtest.service.Video.Resize.VideoResizeService;
+import com.shoplive.web.backendtest.service.Video.Thumbnail.VideoThumbnailService;
+import com.shoplive.web.backendtest.service.Video.Upload.VideoUploadService;
 
-import io.micrometer.common.lang.Nullable;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -18,19 +27,49 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/video")
 class VideoUploadController {
 
+    private final VideoService videoService;
     private final VideoUploadService uploadService;
+    private final VideoThumbnailService thumbnailService;
+    private final VideoResizeService resizeService;
 
     @GetMapping 
     String getView(){
         return "test";
     }
 
-    @PostMapping
+    @PostMapping (consumes = {"multipart/form-data"})
     @ResponseBody
-    public void createVideoFile(@RequestPart @Nullable MultipartFile videoFile){
-        System.out.println(videoFile);
-        System.out.println("요청받음");
-        uploadService.create(videoFile);
+    public ResponseEntity<Object> createVideoFile(@RequestPart("metaInfo") VideoUploadRequestDto dto,
+                                @RequestPart("videoFile") MultipartFile videoFile){
+        String fileName = uploadService.create(videoFile);
+        Long videoId = videoService.insert(fileName, dto).getId();
+        Thread thread = new Thread(()->{
+            try {
+                String resizedFileName = resizeService.create(videoId, fileName);
+                videoService.updateResizedInfo(videoId, resizedFileName);
+                String thumbnailFileName = thumbnailService.create(fileName);
+                videoService.updateThumbnailUrl(videoId, thumbnailFileName);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // throw new VideoUploadException("썸네일 생성에 실패했습니다.");
+            }
+        });
+        Map<String,Object> result = new HashMap<>();
+        result.put("id", videoId);
+
+        thread.start();
+        
+        return ResponseEntity.ok().body(result);
     }
-    
+
+    @GetMapping("{id}") 
+    @ResponseBody
+    public ResponseEntity<Object> getProgress(@PathVariable Long id){
+        Integer progress = resizeService.getProgress(id);
+        Map<String,Object> result = new HashMap<>();
+        result.put("id", id);
+        result.put("progress", String.valueOf(progress) + "%");
+        return ResponseEntity.ok().body(result);
+    }
 }

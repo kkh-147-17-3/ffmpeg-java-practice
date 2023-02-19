@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.Util;
+package com.shoplive.web.backendtest.util;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

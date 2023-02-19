@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.shoplive.web.backendtest.dto.VideoUploadRequestDto;
-import com.shoplive.web.backendtest.exception.VideoUploadException;
-import com.shoplive.web.backendtest.service.Video.VideoService;
-import com.shoplive.web.backendtest.service.Video.Resize.VideoResizeService;
-import com.shoplive.web.backendtest.service.Video.Thumbnail.VideoThumbnailService;
-import com.shoplive.web.backendtest.service.Video.Upload.VideoUploadService;
+import com.shoplive.web.backendtest.service.VideoService;
+import com.shoplive.web.backendtest.service.resize.VideoResizeService;
+import com.shoplive.web.backendtest.service.thumbnail.VideoThumbnailService;
+import com.shoplive.web.backendtest.service.upload.VideoUploadService;
 
 import lombok.RequiredArgsConstructor;
 

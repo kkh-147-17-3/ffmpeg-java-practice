@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.service.Video.Thumbnail;
+package com.shoplive.web.backendtest.service.thumbnail;
 
 import java.io.IOException;
 

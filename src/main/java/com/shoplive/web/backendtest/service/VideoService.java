@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.service.Video;
+package com.shoplive.web.backendtest.service;
 
 import com.shoplive.web.backendtest.dto.VideoUploadRequestDto;
 import com.shoplive.web.backendtest.entity.Video;

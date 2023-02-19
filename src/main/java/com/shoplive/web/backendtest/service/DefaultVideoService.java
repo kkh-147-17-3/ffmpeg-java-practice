@@ -1,12 +1,12 @@
-package com.shoplive.web.backendtest.service.Video;
+package com.shoplive.web.backendtest.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.shoplive.web.backendtest.Util.VideoUploadUtil;
 import com.shoplive.web.backendtest.dao.VideoDao;
 import com.shoplive.web.backendtest.dto.VideoUploadRequestDto;
 import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.util.VideoUploadUtil;
 
 import lombok.RequiredArgsConstructor;
 import net.bramp.ffmpeg.probe.FFmpegFormat;

@@ -1,8 +1,6 @@
-package com.shoplive.web.backendtest.service.Video.Upload;
+package com.shoplive.web.backendtest.service.upload;
 
 import org.springframework.web.multipart.MultipartFile;
-
-import com.shoplive.web.backendtest.dto.VideoUploadRequestDto;
 
 public interface VideoUploadService {
 

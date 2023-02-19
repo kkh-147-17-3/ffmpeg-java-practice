@@ -1,7 +1,6 @@
 package com.shoplive.web.backendtest.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -33,10 +32,10 @@ public class StaticResourceProvider implements WebMvcConfigurer {
         System.out.println(thumbnailUrl);
         registry
                 .addResourceHandler(videoUrl+"/**")
-                .addResourceLocations("file:///" + videoPath +"/");
+                .addResourceLocations("file:" + videoPath);
 
         registry
                 .addResourceHandler(thumbnailUrl+"/**")
-                .addResourceLocations("file:///" + thumbnailPath +"/");
+                .addResourceLocations("file:" + thumbnailPath);
     }
 }

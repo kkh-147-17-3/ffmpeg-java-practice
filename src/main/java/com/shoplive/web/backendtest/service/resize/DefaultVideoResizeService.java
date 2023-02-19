@@ -1,10 +1,8 @@
-package com.shoplive.web.backendtest.service.Video.Resize;
+package com.shoplive.web.backendtest.service.resize;
 
 import org.springframework.stereotype.Service;
 
-import com.shoplive.web.backendtest.Util.VideoUploadUtil;
-import com.shoplive.web.backendtest.dao.VideoDao;
-import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.util.VideoUploadUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +22,8 @@ public class DefaultVideoResizeService implements VideoResizeService {
 
     @Override
     public int getProgress(Long id) {
-        return videoUploadUtil.getProgressMap().get(id);
+        Integer progress =  videoUploadUtil.getProgressMap().get(id);
+        if (progress == null) return -1;
+        else return progress;
     }
 }

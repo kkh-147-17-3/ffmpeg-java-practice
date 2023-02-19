@@ -37,6 +37,9 @@
                 </video>
             </div>
         </div>
+        <div>
+            <span>Progress: </span><span id="progress"></span>
+        </div>
     </fieldset>
 </body>
 </html>
@@ -57,6 +60,7 @@ function uploadVideoHandler(e){
 
     const originalSrc = document.querySelector('#original-source');
     const resizedSrc = document.querySelector('#resized-source');
+    const progress = document.querySelector('#progress');
     const formData = new FormData();
     formData.append('videoFile', videoInput.files[0]);
     formData.append('metaInfo', new Blob([JSON.stringify(
@@ -69,16 +73,39 @@ function uploadVideoHandler(e){
         method:'POST',
         body:formData,
     }
+    let interval;
     fetch('video',option)
     .then(res=>res.json())
     .then(data=>{
         const id = data.id;
-        setInterval(()=>requestProgress(id),2000);
+        progress.innerHTML = "0%";
+        interval = setInterval(()=>requestProgress(id),1000);
     });
-}
-function requestProgress(id){
-    fetch('/video/'+id)
-    .then(res=>res.json())
-    .then(data=>console.log(data));
+    
+    function requestProgress(id){
+        fetch(`/video/${id}/progress`)
+        .then(res=>res.json())
+        .then(data=>{
+            console.log(data);
+            progress.innerHTML = data.progress;
+            if (data.progress === "100%") {
+                clearInterval(interval);
+                requestDetails(id);
+            }
+        });
+    }
+    function requestDetails(id){
+        fetch(`/video/${id}`)
+        .then(res=>res.json())
+        .then(data=>{
+            originalSrc.src = data.original.videoUrl;
+            resizedSrc.src = data.resized.videoUrl;
+            img.src = data.thumbnailUrl;
+            originalVideo.load();
+            originalVideo.play();
+            resizedVideo.load();
+            resizedVideo.play();
+        })
+    }
 }
 </script>

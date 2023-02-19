@@ -1,11 +1,14 @@
 package com.shoplive.web.backendtest.service;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.shoplive.web.backendtest.dao.VideoDao;
-import com.shoplive.web.backendtest.dto.VideoUploadRequestDto;
+import com.shoplive.web.backendtest.dto.VideoDetailsResponse;
+import com.shoplive.web.backendtest.dto.VideoUploadRequest;
 import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.mapper.VideoMapper;
 import com.shoplive.web.backendtest.util.VideoUploadUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ public class DefaultVideoService implements VideoService{
 
     private final VideoDao dao;
     private final VideoUploadUtil util;
+    private final VideoMapper videoMapper = Mappers.getMapper(VideoMapper.class);
     
     @Value("${resource.origin}")
     private String origin;
@@ -29,7 +33,7 @@ public class DefaultVideoService implements VideoService{
     private String thumbnailUrl;
 
     @Override
-    public Video insert(String originalFileName, VideoUploadRequestDto dto) {
+    public Video insert(String originalFileName, VideoUploadRequest dto) {
         
         FFmpegProbeResult originalProbeResult = util.getProbeResult(originalFileName);
         FFmpegStream originalStream = originalProbeResult.getStreams().get(0);
@@ -79,5 +83,14 @@ public class DefaultVideoService implements VideoService{
                             .build();
         System.out.println(video);
         return dao.updateById(video);
+    }
+
+
+    @Override
+    public VideoDetailsResponse getDetails(Long id) {
+        
+        Video video = dao.getById(id);
+        System.out.println(video);
+        return videoMapper.getDetailsResponseFromEntity(video);
     }
 }

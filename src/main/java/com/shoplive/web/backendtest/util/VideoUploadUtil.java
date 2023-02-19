@@ -22,6 +22,7 @@ import net.bramp.ffmpeg.job.FFmpegJob;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import net.bramp.ffmpeg.progress.Progress;
 import net.bramp.ffmpeg.progress.ProgressListener;
+import net.bramp.ffmpeg.progress.Progress.Status;
 
 @RequiredArgsConstructor
 @ConfigurationProperties(prefix = "ffmpeg")
@@ -105,16 +106,16 @@ public class VideoUploadUtil {
         
             @Override
             public void progress(Progress progress) {
-                int percentage = (int) (progress.out_time_ns / durationNanosecs * 100);
                 
-                if (percentage == 100) {
-                    try{
-                        Thread.sleep(3);
-                        progressMap.remove(videoId);
-                    }catch(InterruptedException e){
-                        System.out.println("진행상태 삭제 오류");
-                    }
+                int percentage = 0;
+
+                if (progress.status == Status.END) {                        
+                    percentage = 100;
                 }
+                else{
+                    percentage = (int) (progress.out_time_ns / durationNanosecs * 100);
+                } 
+
                 progressMap.put(videoId, percentage);
 
                 // Print out interesting information about the progress

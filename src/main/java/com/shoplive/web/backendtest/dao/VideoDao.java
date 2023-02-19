@@ -9,4 +9,5 @@ public interface VideoDao {
     
     int insert(Video video);
     int updateById(Video video);
+    Video getById(Long id);
 }

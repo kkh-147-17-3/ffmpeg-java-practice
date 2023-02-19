@@ -26,4 +26,10 @@
         </set>
         WHERE id=#{id}
     </update>
+    <select id="getById" resultType="Video">
+        SELECT *
+        FROM video
+        WHERE id=#{id}
+    </select>
+
 </mapper>

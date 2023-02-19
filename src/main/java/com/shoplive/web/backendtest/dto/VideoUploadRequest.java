@@ -11,6 +11,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class VideoUploadRequestDto {
+public class VideoUploadRequest {
     private String title;
 }

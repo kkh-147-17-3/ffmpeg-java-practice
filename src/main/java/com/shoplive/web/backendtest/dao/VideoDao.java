@@ -8,6 +8,6 @@ import com.shoplive.web.backendtest.entity.Video;
 public interface VideoDao {
     
     int insert(Video video);
-    int updateById(Video video);
+    int update(Video video);
     Video getById(Long id);
 }

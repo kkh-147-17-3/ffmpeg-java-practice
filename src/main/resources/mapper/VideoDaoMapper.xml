@@ -10,7 +10,7 @@
         VALUES(#{title}, #{originalFilesize}, #{originalWidth}, #{originalHeight}, #{originalVideoUrl},
             #{resizedFilesize},#{resizedWidth},#{resizedHeight},#{resizedVideoUrl},#{thumbnailUrl})
     </insert>
-    <update id="updateById" parameterType="Video">
+    <update id="update" parameterType="Video">
         UPDATE video
         <set>
             <if test="title != null">title=#{title},</if>

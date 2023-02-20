@@ -1,6 +1,6 @@
 package com.shoplive.web.backendtest.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +26,6 @@ public class Video {
     private int resizedWidth;
     private int resizedHeight;
     private String resizedVideoUrl;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private String thumbnailUrl;
 }

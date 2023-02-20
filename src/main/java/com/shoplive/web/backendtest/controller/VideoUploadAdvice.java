@@ -1,5 +1,6 @@
 package com.shoplive.web.backendtest.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,6 +13,6 @@ public class VideoUploadAdvice {
     @ResponseBody
     public ResponseEntity<String> maxUploadSizeExceededExceptionHandler(Exception e){
         System.out.println("파일 사이즈 큼");
-        return ResponseEntity.ok("파일 사이즈 큼");
+        return new ResponseEntity<>("파일 사이즈 큼", HttpStatus.FORBIDDEN);
     }
 }

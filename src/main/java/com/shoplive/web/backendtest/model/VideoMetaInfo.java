@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.dto;
+package com.shoplive.web.backendtest.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

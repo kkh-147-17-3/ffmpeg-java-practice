@@ -2,8 +2,8 @@ package com.shoplive.web.backendtest.service.resize;
 
 import org.springframework.stereotype.Service;
 
+import com.shoplive.web.backendtest.Response.VideoProgressResponse;
 import com.shoplive.web.backendtest.dao.VideoDao;
-import com.shoplive.web.backendtest.dto.VideoProgressResponse;
 import com.shoplive.web.backendtest.entity.Video;
 import com.shoplive.web.backendtest.exception.VideoFileNotFoundException;
 import com.shoplive.web.backendtest.util.VideoUploadUtil;

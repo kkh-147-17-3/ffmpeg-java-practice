@@ -1,4 +1,6 @@
-package com.shoplive.web.backendtest.dto;
+package com.shoplive.web.backendtest.Response;
+
+import com.shoplive.web.backendtest.model.VideoMetaInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

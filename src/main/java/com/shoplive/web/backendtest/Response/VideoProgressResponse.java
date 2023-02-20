@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.dto;
+package com.shoplive.web.backendtest.Response;
 
 import lombok.Builder;
 import lombok.Getter;

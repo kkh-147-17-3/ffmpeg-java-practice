@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-import com.shoplive.web.backendtest.dto.VideoDetailsResponse;
+import com.shoplive.web.backendtest.Response.VideoDetailsResponse;
 import com.shoplive.web.backendtest.entity.Video;
 
 public class VideoMapperTest {

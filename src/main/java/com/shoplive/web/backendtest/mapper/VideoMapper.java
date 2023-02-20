@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import com.shoplive.web.backendtest.dto.VideoDetailsResponse;
+import com.shoplive.web.backendtest.Response.VideoDetailsResponse;
 import com.shoplive.web.backendtest.entity.Video;
 
 @Mapper(componentModel = "spring")

@@ -4,13 +4,13 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.shoplive.web.backendtest.Request.VideoUploadRequest;
+import com.shoplive.web.backendtest.Response.VideoDetailsResponse;
 import com.shoplive.web.backendtest.dao.VideoDao;
-import com.shoplive.web.backendtest.dto.VideoDetailsResponse;
-import com.shoplive.web.backendtest.dto.VideoMetaInfo;
-import com.shoplive.web.backendtest.dto.VideoUploadRequest;
 import com.shoplive.web.backendtest.entity.Video;
 import com.shoplive.web.backendtest.exception.VideoUploadException;
 import com.shoplive.web.backendtest.mapper.VideoMapper;
+import com.shoplive.web.backendtest.model.VideoMetaInfo;
 import com.shoplive.web.backendtest.util.VideoUploadUtil;
 
 import lombok.RequiredArgsConstructor;

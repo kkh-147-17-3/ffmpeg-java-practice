@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest;
+package com.shoplive.web.backendtest.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -9,7 +9,6 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
-import com.shoplive.web.backendtest.dao.VideoDao;
 import com.shoplive.web.backendtest.entity.Video;
 
 @MybatisTest

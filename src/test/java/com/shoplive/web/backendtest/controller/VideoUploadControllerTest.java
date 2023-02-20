@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest;
+package com.shoplive.web.backendtest.controller;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,7 +27,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.shoplive.web.backendtest.controller.VideoUploadController;
 import com.shoplive.web.backendtest.dto.VideoDetailsResponse;
 import com.shoplive.web.backendtest.dto.VideoProgressResponse;
 import com.shoplive.web.backendtest.dto.VideoUploadRequest;

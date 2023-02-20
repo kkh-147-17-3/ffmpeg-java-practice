@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest;
+package com.shoplive.web.backendtest.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import com.shoplive.web.backendtest.dto.VideoDetailsResponse;
 import com.shoplive.web.backendtest.entity.Video;
-import com.shoplive.web.backendtest.mapper.VideoMapper;
-import com.shoplive.web.backendtest.mapper.VideoMapperImpl;
 
 public class VideoMapperTest {
     

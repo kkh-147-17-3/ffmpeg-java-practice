@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest;
+package com.shoplive.web.backendtest.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,8 +20,6 @@ import com.shoplive.web.backendtest.dto.VideoDetailsResponse;
 import com.shoplive.web.backendtest.dto.VideoMetaInfo;
 import com.shoplive.web.backendtest.dto.VideoUploadRequest;
 import com.shoplive.web.backendtest.entity.Video;
-import com.shoplive.web.backendtest.service.DefaultVideoService;
-import com.shoplive.web.backendtest.service.VideoService;
 import com.shoplive.web.backendtest.util.VideoUploadUtil;
 
 public class VideoServiceTest {

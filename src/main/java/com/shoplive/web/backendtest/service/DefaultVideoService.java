@@ -6,15 +6,14 @@ import org.springframework.stereotype.Service;
 
 import com.shoplive.web.backendtest.dao.VideoDao;
 import com.shoplive.web.backendtest.dto.VideoDetailsResponse;
+import com.shoplive.web.backendtest.dto.VideoMetaInfo;
 import com.shoplive.web.backendtest.dto.VideoUploadRequest;
 import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.exception.VideoUploadException;
 import com.shoplive.web.backendtest.mapper.VideoMapper;
 import com.shoplive.web.backendtest.util.VideoUploadUtil;
 
 import lombok.RequiredArgsConstructor;
-import net.bramp.ffmpeg.probe.FFmpegFormat;
-import net.bramp.ffmpeg.probe.FFmpegProbeResult;
-import net.bramp.ffmpeg.probe.FFmpegStream;
 
 @Service
 @RequiredArgsConstructor
@@ -24,30 +23,25 @@ public class DefaultVideoService implements VideoService{
     private final VideoUploadUtil util;
     private final VideoMapper videoMapper = Mappers.getMapper(VideoMapper.class);
     
+
     @Value("${resource.origin}")
     private String origin;
 
-    @Value("${resource.video-url}")
-    private String videoUrl;
     @Value("${resource.thumbnail-url}")
     private String thumbnailUrl;
 
     @Override
     public Video insert(String originalFileName, VideoUploadRequest dto) {
         
-        FFmpegProbeResult originalProbeResult = util.getProbeResult(originalFileName);
-        FFmpegStream originalStream = originalProbeResult.getStreams().get(0);
-        FFmpegFormat originalFormat = originalProbeResult.getFormat();
-
+        VideoMetaInfo info = util.getMetaInfoByFileName(originalFileName);
 
         Video video = Video.builder()
                             .title(dto.getTitle())
-                            .originalFilesize(originalFormat.size)
-                            .originalWidth(originalStream.width)
-                            .originalHeight(originalStream.height)
-                            .originalVideoUrl(origin + videoUrl+"/"+originalFileName)
+                            .originalFilesize(info.getFilesize())
+                            .originalWidth(info.getWidth())
+                            .originalHeight(info.getHeight())
+                            .originalVideoUrl(info.getVideoUrl())
                             .build();
-
 
         dao.insert(video);
         return video;
@@ -55,34 +49,37 @@ public class DefaultVideoService implements VideoService{
     
     
     @Override
-    public int updateResizedInfo(Long videoId, String resizedFileName) {
+    public int updateResizedInfo(Long videoId, String resizedFileName) throws VideoUploadException{
 
-        FFmpegProbeResult resizedProbeResult = util.getProbeResult(resizedFileName);
-        FFmpegStream resizedStream = resizedProbeResult.getStreams().get(0);
-        FFmpegFormat resizedFormat = resizedProbeResult.getFormat();
+        VideoMetaInfo info = util.getMetaInfoByFileName(resizedFileName);
         
         Video video = Video.builder()
                             .id(videoId)
-                            .resizedFilesize(resizedFormat.size)
-                            .resizedWidth(resizedStream.width)
-                            .resizedHeight(resizedStream.height)
-                            .resizedVideoUrl(origin +videoUrl+"/"+resizedFileName)
+                            .resizedFilesize(info.getFilesize())
+                            .resizedWidth(info.getWidth())
+                            .resizedHeight(info.getHeight())
+                            .resizedVideoUrl(info.getVideoUrl())
                             .build();
         
-        System.out.println(video);
+        int result = dao.update(video);
 
-        return dao.updateById(video);
+        if (result != 1) throw new VideoUploadException ("리사이징 정보를 DB에 업데이트하는 데 실패했습니다.");
+
+        return result;
     }
 
     @Override
-    public int updateThumbnailUrl(Long videoId, String thumbnailFileName) {
+    public int updateThumbnailUrl(Long videoId, String thumbnailFileName) throws VideoUploadException{
 
         Video video = Video.builder()
                             .id(videoId)
                             .thumbnailUrl(origin + thumbnailUrl+"/"+thumbnailFileName)
                             .build();
-        System.out.println(video);
-        return dao.updateById(video);
+                            
+        int result = dao.update(video);
+        if (result != 1) throw new VideoUploadException("썸네일 정보를 DB에 업데이트하는 데 실패했습니다.");
+        
+        return result;
     }
 
 

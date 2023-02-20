@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import com.shoplive.web.backendtest.dto.VideoMetaInfo;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -19,10 +21,12 @@ import net.bramp.ffmpeg.FFmpegUtils;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.job.FFmpegJob;
+import net.bramp.ffmpeg.probe.FFmpegFormat;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
+import net.bramp.ffmpeg.probe.FFmpegStream;
 import net.bramp.ffmpeg.progress.Progress;
-import net.bramp.ffmpeg.progress.ProgressListener;
 import net.bramp.ffmpeg.progress.Progress.Status;
+import net.bramp.ffmpeg.progress.ProgressListener;
 
 @RequiredArgsConstructor
 @ConfigurationProperties(prefix = "ffmpeg")
@@ -33,6 +37,11 @@ public class VideoUploadUtil {
 
     private final FFmpeg ffMpeg;
     private final FFprobe ffProbe;
+
+    @Value("${resource.origin}")
+    private String origin;
+    @Value("${resource.video-url}")
+    private String videoUrl;
 
     @Value("${file.video-upload-dir}")
     private String savedPath;
@@ -135,5 +144,19 @@ public class VideoUploadUtil {
         job.run();
 
         return outputFileName;
+    }
+
+    public VideoMetaInfo getMetaInfoByFileName(String fileName){
+        FFmpegProbeResult probeResult = getProbeResult(fileName);
+        FFmpegStream stream = probeResult.getStreams().get(0);
+        FFmpegFormat format = probeResult.getFormat();
+
+        VideoMetaInfo info = VideoMetaInfo.builder()
+                                        .filesize(format.size)
+                                        .width(stream.width)
+                                        .height(stream.height)
+                                        .videoUrl(origin +videoUrl+"/"+fileName)
+                                        .build();
+        return info;
     }
 }

@@ -15,7 +15,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class VideoDetailsResponse {
 
-    private int id;
+    private Long id;
     private String title;
     private VideoMetaInfo original;
     private VideoMetaInfo resized;

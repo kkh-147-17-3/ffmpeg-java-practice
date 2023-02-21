@@ -89,8 +89,8 @@ public class VideoUploadControllerTest {
                             id(1L).
                             build());
 
-        when(videoResizeService.create(anyLong(),anyString())).thenReturn("test_sample_360.mp4");
-        when(videoThumbnailService.create(anyString())).thenReturn("test_sample_thumb.mp4");
+        when(videoResizeService.createResized("test_sample.mp4")).thenReturn("test_sample_360.mp4");
+        when(videoThumbnailService.createThumbnail("test_sample.mp4")).thenReturn("test_sample_thumb.mp4");
         when(videoService.updateResizedInfo(anyLong(), anyString())).thenReturn(1);
         when(videoService.updateThumbnailUrl(anyLong(), anyString())).thenReturn(1);
         
@@ -114,7 +114,7 @@ public class VideoUploadControllerTest {
         try{
             mvc.perform(get("/video/" + String.valueOf(videoId)).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id",equalTo(videoId)));
+                .andExpect(jsonPath("$.id").value(equalTo(videoId), Long.class));
         }
         catch (Exception e){
             e.printStackTrace();

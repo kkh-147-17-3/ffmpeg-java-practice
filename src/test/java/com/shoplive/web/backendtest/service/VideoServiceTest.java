@@ -19,8 +19,8 @@ import com.shoplive.web.backendtest.Request.VideoUploadRequest;
 import com.shoplive.web.backendtest.Response.VideoDetailsResponse;
 import com.shoplive.web.backendtest.dao.VideoDao;
 import com.shoplive.web.backendtest.entity.Video;
-import com.shoplive.web.backendtest.model.VideoMetaInfo;
-import com.shoplive.web.backendtest.util.VideoUploadUtil;
+import com.shoplive.web.backendtest.helper.VideoUploadHelper;
+import com.shoplive.web.backendtest.model.WebVideoMetaInfo;
 
 public class VideoServiceTest {
 
@@ -28,7 +28,7 @@ public class VideoServiceTest {
     private VideoDao videoDao;
 
     @Mock
-    private VideoUploadUtil videoUploadUtil;
+    private VideoUploadHelper videoUploadHelper;
 
     private VideoService videoService;
 
@@ -37,7 +37,7 @@ public class VideoServiceTest {
     @BeforeEach
     public void setup(){
         MockitoAnnotations.openMocks(this);
-        videoService = new DefaultVideoService(videoDao, videoUploadUtil);
+        videoService = new DefaultVideoService(videoDao, videoUploadHelper);
     }
 
     @BeforeEach
@@ -84,14 +84,14 @@ public class VideoServiceTest {
     void insertTest(){
         String insertedFileName = "test_sample1.mp4";
         VideoUploadRequest requestDto = new VideoUploadRequest(sampleVideo.getTitle());
-        VideoMetaInfo insertedVideoMetaInfo = VideoMetaInfo.builder()
+        WebVideoMetaInfo insertedVideoMetaInfo = WebVideoMetaInfo.builder()
                                                             .filesize(sampleVideo.getOriginalFilesize())
                                                             .width(sampleVideo.getOriginalWidth())
                                                             .height(sampleVideo.getOriginalHeight())
                                                             .videoUrl(sampleVideo.getOriginalVideoUrl())
                                                             .build();
 
-        when(videoUploadUtil.getMetaInfoByFileName(insertedFileName))
+        when(videoUploadHelper.getWebVideoMetaInfoByFileName(insertedFileName))
                             .thenReturn(insertedVideoMetaInfo);
         
         when(videoDao.insert(any(Video.class))).thenAnswer(invocation -> {
@@ -114,13 +114,13 @@ public class VideoServiceTest {
     void updateResizedInfoTest(){
         String resizedFileName = "test_sample1_360.mp4";
         Long videoId = sampleVideo.getId();
-        VideoMetaInfo resizedVideoMetaInfo = VideoMetaInfo.builder()
+        WebVideoMetaInfo resizedVideoMetaInfo = WebVideoMetaInfo.builder()
                                                             .filesize(sampleVideo.getResizedFilesize())
                                                             .width(sampleVideo.getResizedWidth())
                                                             .height(sampleVideo.getResizedHeight())
                                                             .videoUrl(sampleVideo.getResizedVideoUrl())
                                                             .build();
-        when(videoUploadUtil.getMetaInfoByFileName(resizedFileName))
+        when(videoUploadHelper.getWebVideoMetaInfoByFileName(resizedFileName))
                             .thenReturn(resizedVideoMetaInfo);
         
         when(videoDao.update(any(Video.class))).thenReturn(1);

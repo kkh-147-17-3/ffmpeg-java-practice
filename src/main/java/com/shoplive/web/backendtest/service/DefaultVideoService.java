@@ -1,7 +1,6 @@
 package com.shoplive.web.backendtest.service;
 
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.shoplive.web.backendtest.Request.VideoUploadRequest;
@@ -9,9 +8,9 @@ import com.shoplive.web.backendtest.Response.VideoDetailsResponse;
 import com.shoplive.web.backendtest.dao.VideoDao;
 import com.shoplive.web.backendtest.entity.Video;
 import com.shoplive.web.backendtest.exception.VideoUploadException;
+import com.shoplive.web.backendtest.helper.VideoUploadHelper;
 import com.shoplive.web.backendtest.mapper.VideoMapper;
-import com.shoplive.web.backendtest.model.VideoMetaInfo;
-import com.shoplive.web.backendtest.util.VideoUploadUtil;
+import com.shoplive.web.backendtest.model.WebVideoMetaInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,20 +19,14 @@ import lombok.RequiredArgsConstructor;
 public class DefaultVideoService implements VideoService{
 
     private final VideoDao dao;
-    private final VideoUploadUtil util;
+    // private final VideoUploadUtil util;
+    private final VideoUploadHelper videoUploadHelper;
     private final VideoMapper videoMapper = Mappers.getMapper(VideoMapper.class);
     
-
-    @Value("${resource.origin}")
-    private String origin;
-
-    @Value("${resource.thumbnail-url}")
-    private String thumbnailUrl;
-
     @Override
     public Video insert(String originalFileName, VideoUploadRequest dto) {
         
-        VideoMetaInfo info = util.getMetaInfoByFileName(originalFileName);
+        WebVideoMetaInfo info = videoUploadHelper.getWebVideoMetaInfoByFileName(originalFileName);
 
         Video video = Video.builder()
                             .title(dto.getTitle())
@@ -51,7 +44,7 @@ public class DefaultVideoService implements VideoService{
     @Override
     public int updateResizedInfo(Long videoId, String resizedFileName) throws VideoUploadException{
 
-        VideoMetaInfo info = util.getMetaInfoByFileName(resizedFileName);
+        WebVideoMetaInfo info = videoUploadHelper.getWebVideoMetaInfoByFileName(resizedFileName);
         
         Video video = Video.builder()
                             .id(videoId)
@@ -71,9 +64,11 @@ public class DefaultVideoService implements VideoService{
     @Override
     public int updateThumbnailUrl(Long videoId, String thumbnailFileName) throws VideoUploadException{
 
+        String thumbnailUrl = videoUploadHelper.getThumbnailUrl(thumbnailFileName);
+
         Video video = Video.builder()
                             .id(videoId)
-                            .thumbnailUrl(origin + thumbnailUrl+"/"+thumbnailFileName)
+                            .thumbnailUrl(thumbnailUrl)
                             .build();
                             
         int result = dao.update(video);

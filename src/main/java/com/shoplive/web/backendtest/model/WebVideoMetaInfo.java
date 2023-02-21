@@ -3,14 +3,16 @@ package com.shoplive.web.backendtest.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Getter
-@SuperBuilder
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class VideoMetaInfo {
-    private long filesize;
-    private int width;
-    private int height;
+@SuperBuilder
+public class WebVideoMetaInfo extends VideoMetaInfo{
+    private String videoUrl;
 }

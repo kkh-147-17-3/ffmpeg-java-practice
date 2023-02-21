@@ -4,8 +4,6 @@ import java.io.IOException;
 
 public interface VideoThumbnailService {
 
-    void init();
-
-    String create(String fileName) throws IOException;
+    String createThumbnail(String fileName) throws IOException;
     
 }

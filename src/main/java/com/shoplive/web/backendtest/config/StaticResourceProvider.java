@@ -13,15 +13,15 @@ import lombok.Setter;
 @Setter
 public class StaticResourceProvider implements WebMvcConfigurer {
 
-    @Value("${resource.video-url}")
+    @Value("${video.video-url}")
     private String videoUrl;
-    @Value("${resource.thumbnail-url}")
+    @Value("${video.thumbnail-url}")
     private String thumbnailUrl;
     
-    @Value("${ffmpeg.convert-save-path}")
+    @Value("${video.convert-save-path}")
     private String videoPath;
     
-    @Value("${ffmpeg.thumbnail-save-path}")
+    @Value("${video.thumbnail-save-path}")
     private String thumbnailPath;
     
     @Override

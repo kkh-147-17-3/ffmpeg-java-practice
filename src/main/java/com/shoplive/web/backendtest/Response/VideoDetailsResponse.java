@@ -1,6 +1,6 @@
 package com.shoplive.web.backendtest.Response;
 
-import com.shoplive.web.backendtest.model.VideoMetaInfo;
+import com.shoplive.web.backendtest.model.WebVideoMetaInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,8 +19,8 @@ public class VideoDetailsResponse {
 
     private Long id;
     private String title;
-    private VideoMetaInfo original;
-    private VideoMetaInfo resized;
+    private WebVideoMetaInfo original;
+    private WebVideoMetaInfo resized;
     private String createdAt;
     private String thumbnailUrl;
 }

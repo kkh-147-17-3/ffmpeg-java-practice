@@ -4,17 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <title>Document</title>
 </head>
 <body>
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Shoplive Backend Test - 김경환</a>
+      </nav>
     <div id="upload-video">
         <div>
-            <label for="input-video">동영상 업로드</label>
-            <input type="file" id="input-video" name="video-file">
-            <label for="input-title">동영상 제목</label>
-            <input type="text" id="input-title" name="title">
+            <label class="form-label" for="input-video">동영상을 선택해주세요.</label>
+            <input type="file" class="form-control" id="input-video" />
         </div>
-        <input type="button" value="upload">
+        <div class="form-outlline">
+            <label class="form-label" for="input-title">동영상 제목</label>
+            <input class="form-control" type="text" id="input-title" name="title" placeholder="Title">
+        </div>
+        
+        <input type="button" value="Upload" class="btn btn-primary">
     </div>
     <fieldset style="margin-top:100px; width: 1200px; height: 300px;">
         <legend>업로드 결과</legend>
@@ -39,6 +47,9 @@
         </div>
         <div>
             <span>Progress: </span><span id="progress"></span>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 0%;"></div>
+            </div>
         </div>
     </fieldset>
 </body>
@@ -61,6 +72,7 @@ function uploadVideoHandler(e){
     const originalSrc = document.querySelector('#original-source');
     const resizedSrc = document.querySelector('#resized-source');
     const progress = document.querySelector('#progress');
+    const progressBar = document.querySelector('.progress-bar')
     const formData = new FormData();
     formData.append('videoFile', videoInput.files[0]);
     formData.append('metaInfo', new Blob([JSON.stringify(
@@ -79,6 +91,7 @@ function uploadVideoHandler(e){
     .then(data=>{
         const id = data.id;
         progress.innerHTML = "0%";
+        progressBar.style.width = "0%";
         interval = setInterval(()=>requestProgress(id),1000);
     });
     
@@ -88,6 +101,7 @@ function uploadVideoHandler(e){
         .then(data=>{
             console.log(data);
             progress.innerHTML = data.progress;
+            progressBar.style.width = data.progress;
             if (data.progress === "100%") {
                 clearInterval(interval);
                 requestDetails(id);

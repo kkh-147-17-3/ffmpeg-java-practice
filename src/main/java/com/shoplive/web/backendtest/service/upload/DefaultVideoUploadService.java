@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.shoplive.web.backendtest.exception.VideoUploadException;
-import com.shoplive.web.backendtest.util.StorageProperties;
+import com.shoplive.web.backendtest.helper.StorageProperties;
 
 @Service
 public class DefaultVideoUploadService implements VideoUploadService {

@@ -48,10 +48,10 @@ public class VideoUploadController {
         Long videoId = videoService.insert(fileName, dto).getId();
         Thread thread = new Thread(()->{
             try {
-                String resizedFileName = resizeService.create(videoId, fileName);
+                String resizedFileName = resizeService.createResized(fileName);
                 videoService.updateResizedInfo(videoId, resizedFileName);
                 
-                String thumbnailFileName = thumbnailService.create(fileName);
+                String thumbnailFileName = thumbnailService.createThumbnail(fileName);
                 
                 videoService.updateThumbnailUrl(videoId, thumbnailFileName);
 

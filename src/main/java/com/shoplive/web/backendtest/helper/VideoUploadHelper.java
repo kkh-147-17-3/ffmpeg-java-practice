@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import com.shoplive.web.backendtest.exception.ThumbnailUploadException;
 import com.shoplive.web.backendtest.interfaces.ProgressibleVideoResizer;
-import com.shoplive.web.backendtest.interfaces.VideoThumbnailer;
+import com.shoplive.web.backendtest.interfaces.ProgressibleVideoThumbnailer;
 import com.shoplive.web.backendtest.model.VideoMetaInfo;
 import com.shoplive.web.backendtest.model.WebVideoMetaInfo;
 
@@ -31,7 +31,7 @@ public abstract class VideoUploadHelper {
     private ProgressibleVideoResizer videoResizer;
 
     @Autowired
-    private VideoThumbnailer thumbnailHandler;
+    private ProgressibleVideoThumbnailer videoThumbnailer;
 
     private String resultThumbnailExt = ".gif";
     private String thumbnailSavepath;
@@ -68,7 +68,7 @@ public abstract class VideoUploadHelper {
         String targetFilePath = originPath + targetFileName;
         String resultFileName = FilenameUtils.getBaseName(targetFileName) + thumbnailSuffix + resultThumbnailExt;
         String resultFilePath = thumbnailSavepath + resultFileName;
-        thumbnailHandler.createThumbnail(targetFilePath, resultFilePath);
+        videoThumbnailer.createThumbnail(targetFilePath, resultFilePath);
         return resultFileName;
     }
 
@@ -89,7 +89,7 @@ public abstract class VideoUploadHelper {
         return thumbnailUrl + "/" + fileName;
     }
 
-    public String getResizedPathFromUrl(String url){
+    public String getSavedPathFromUrl(String url){
         String fileName = FilenameUtils.getName(url);
         return convertSavePath + fileName;
     }
@@ -110,6 +110,10 @@ public abstract class VideoUploadHelper {
     }
     
     abstract public VideoMetaInfo getMataInfoByFileName(String fileName);
+
+    public Integer getThumbnailProgress(String thumbnailPath) {
+        return videoThumbnailer.getProgress(thumbnailPath);
+    }
 
 }
 

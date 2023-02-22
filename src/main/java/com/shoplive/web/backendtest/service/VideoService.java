@@ -1,8 +1,8 @@
 package com.shoplive.web.backendtest.service;
 
-import com.shoplive.web.backendtest.Request.VideoUploadRequest;
-import com.shoplive.web.backendtest.Response.VideoDetailsResponse;
 import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.request.VideoUploadRequest;
+import com.shoplive.web.backendtest.response.VideoDetailsResponse;
 
 public interface VideoService {
 

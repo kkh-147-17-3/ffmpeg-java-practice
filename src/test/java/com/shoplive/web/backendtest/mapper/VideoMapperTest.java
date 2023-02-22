@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-import com.shoplive.web.backendtest.Response.VideoDetailsResponse;
 import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.response.VideoDetailsResponse;
 
 public class VideoMapperTest {
     

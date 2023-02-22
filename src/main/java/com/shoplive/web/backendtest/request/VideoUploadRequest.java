@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.Request;
+package com.shoplive.web.backendtest.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -27,10 +27,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.shoplive.web.backendtest.Request.VideoUploadRequest;
-import com.shoplive.web.backendtest.Response.VideoDetailsResponse;
-import com.shoplive.web.backendtest.Response.VideoProgressResponse;
 import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.request.VideoUploadRequest;
+import com.shoplive.web.backendtest.response.VideoDetailsResponse;
+import com.shoplive.web.backendtest.response.VideoProgressResponse;
 import com.shoplive.web.backendtest.service.VideoService;
 import com.shoplive.web.backendtest.service.resize.VideoResizeService;
 import com.shoplive.web.backendtest.service.thumbnail.VideoThumbnailService;

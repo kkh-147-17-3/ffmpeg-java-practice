@@ -2,7 +2,7 @@ package com.shoplive.web.backendtest.service.thumbnail;
 
 import java.io.IOException;
 
-import com.shoplive.web.backendtest.Response.VideoProgressResponse;
+import com.shoplive.web.backendtest.response.VideoProgressResponse;
 
 public interface VideoThumbnailService {
 

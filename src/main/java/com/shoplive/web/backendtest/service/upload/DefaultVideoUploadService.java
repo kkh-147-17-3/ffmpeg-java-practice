@@ -63,11 +63,11 @@ public class DefaultVideoUploadService implements VideoUploadService {
             // Copy file to the target location (Replacing existing file with the same name)
             Path targetLocation = this.rootLocation.resolve(fileName);
             Files.copy(videoFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
         }
         catch (IOException e)
         {
             throw new VideoUploadException ("Failed to store file " + videoFile.getOriginalFilename());
         }
+        return fileName;
     }
 }

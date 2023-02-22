@@ -15,12 +15,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.shoplive.web.backendtest.Request.VideoUploadRequest;
-import com.shoplive.web.backendtest.Response.VideoDetailsResponse;
 import com.shoplive.web.backendtest.dao.VideoDao;
 import com.shoplive.web.backendtest.entity.Video;
 import com.shoplive.web.backendtest.helper.VideoUploadHelper;
 import com.shoplive.web.backendtest.model.WebVideoMetaInfo;
+import com.shoplive.web.backendtest.request.VideoUploadRequest;
+import com.shoplive.web.backendtest.response.VideoDetailsResponse;
 
 public class VideoServiceTest {
 

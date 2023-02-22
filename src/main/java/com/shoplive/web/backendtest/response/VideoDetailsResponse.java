@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.Response;
+package com.shoplive.web.backendtest.response;
 
 import com.shoplive.web.backendtest.model.WebVideoMetaInfo;
 

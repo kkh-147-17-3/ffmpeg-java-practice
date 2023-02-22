@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.shoplive.web.backendtest.Request.VideoUploadRequest;
-import com.shoplive.web.backendtest.Response.VideoDetailsResponse;
-import com.shoplive.web.backendtest.Response.VideoProgressResponse;
 import com.shoplive.web.backendtest.exception.VideoUploadException;
+import com.shoplive.web.backendtest.request.VideoUploadRequest;
+import com.shoplive.web.backendtest.response.VideoDetailsResponse;
+import com.shoplive.web.backendtest.response.VideoProgressResponse;
 import com.shoplive.web.backendtest.service.VideoService;
 import com.shoplive.web.backendtest.service.resize.VideoResizeService;
 import com.shoplive.web.backendtest.service.thumbnail.VideoThumbnailService;
@@ -48,21 +48,20 @@ public class VideoUploadController {
         Long videoId = videoService.insert(fileName, dto).getId();
         Thread thread = new Thread(()->{
             try {
+                String thumbnailFileName = thumbnailService.createThumbnail(fileName);
+                videoService.updateThumbnailUrl(videoId, thumbnailFileName);
+                
                 String resizedFileName = resizeService.createResized(fileName);
                 videoService.updateResizedInfo(videoId, resizedFileName);
                 
-                String thumbnailFileName = thumbnailService.createThumbnail(fileName);
-                
-                videoService.updateThumbnailUrl(videoId, thumbnailFileName);
-
             } catch (IOException e){
                 throw new VideoUploadException("썸네일 생성에 실패했습니다.");
             }
         });
+        thread.start();
+        
         Map<String,Object> result = new HashMap<>();
         result.put("id", videoId);
-
-        thread.start();
         
         return ResponseEntity.ok().body(result);
     }
@@ -77,8 +76,16 @@ public class VideoUploadController {
 
     @GetMapping("{id}/progress") 
     @ResponseBody
-    public ResponseEntity<Object> getProgress(@PathVariable Long id){
+    public ResponseEntity<Object> getResizeProgress(@PathVariable Long id){
         VideoProgressResponse response = resizeService.getProgress(id);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("{id}/thumbnail/progress") 
+    @ResponseBody
+    public ResponseEntity<Object> getThumbnailProgress(@PathVariable Long id){
+        VideoProgressResponse response = thumbnailService.getProgress(id);
 
         return ResponseEntity.ok().body(response);
     }

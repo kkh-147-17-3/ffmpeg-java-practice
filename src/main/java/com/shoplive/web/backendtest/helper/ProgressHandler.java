@@ -13,10 +13,10 @@ public class ProgressHandler {
 
     public void updateProgress(String name, Integer value){
         if (value > 100){
-            throw new RuntimeException("진행 상태는 100보다 클 수 없습니다.");
+            throw new RuntimeException("진행 상태는 100보다 클 수 없습니다." + value);
         }
         if (value < 0){
-            throw new RuntimeException("진행 상태는 0보다 작을 수 없습니다.");
+            throw new RuntimeException("진행 상태는 0보다 작을 수 없습니다. 입력값: " + value);
         }
 
         status.put(name, value);        

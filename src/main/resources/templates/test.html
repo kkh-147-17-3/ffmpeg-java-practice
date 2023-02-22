@@ -34,21 +34,25 @@
             <div>
                 업로드 원본 영상
                 <video width="300" controls id="original-video">
-                    <source src="#" id="original-source" type="video/mp4">
+                    <source id="original-source" type="video/mp4">
                 </video> 
             </div>
             
             <div>
                 업로드 리자이징 영상
                 <video width="300" controls id="resized-video">
-                    <source src="#" id="resized-source" type="video/mp4">
+                    <source id="resized-source" type="video/mp4">
                 </video>
             </div>
         </div>
         <div>
-            <span>Progress: </span><span id="progress"></span>
+            <span>Resize Progress: </span>
             <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 0%;"></div>
+                <div id="resize-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;"></div>
+            </div>
+            <span>Thumbnail Progress: </span>
+            <div class="progress">
+                <div id="thumbnail-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;"></div>
             </div>
         </div>
     </fieldset>
@@ -71,8 +75,9 @@ function uploadVideoHandler(e){
 
     const originalSrc = document.querySelector('#original-source');
     const resizedSrc = document.querySelector('#resized-source');
-    const progress = document.querySelector('#progress');
-    const progressBar = document.querySelector('.progress-bar')
+    const resizeProgressBar = document.querySelector('#resize-progress');
+    const thumbnailProgressBar = document.querySelector('#thumbnail-progress');
+
     const formData = new FormData();
     formData.append('videoFile', videoInput.files[0]);
     formData.append('metaInfo', new Blob([JSON.stringify(
@@ -90,35 +95,60 @@ function uploadVideoHandler(e){
     .then(res=>res.json())
     .then(data=>{
         const id = data.id;
-        progress.innerHTML = "0%";
-        progressBar.style.width = "0%";
-        interval = setInterval(()=>requestProgress(id),1000);
+        resizeProgressBar.innerText = "0%";
+        resizeProgressBar.style.width = "0%";
+        thumbnailProgressBar.innerText = "0%";
+        thumbnailProgressBar.style.width = "0%";
+        thumbnailProgressRequestInterval = setInterval(()=>requestThumbnailProgress(id),1000);
     });
     
-    function requestProgress(id){
+    function requestResizeProgress(id){
         fetch(`/video/${id}/progress`)
         .then(res=>res.json())
         .then(data=>{
             console.log(data);
-            progress.innerHTML = data.progress;
-            progressBar.style.width = data.progress;
+            resizeProgressBar.innerText = data.progress;
+            resizeProgressBar.style.width = data.progress;
             if (data.progress === "100%") {
-                clearInterval(interval);
                 requestDetails(id);
             }
         });
     }
+
+    function requestThumbnailProgress(id){
+        fetch(`/video/${id}/thumbnail/progress`)
+        .then(res=>res.json())
+        .then(data=>{
+            thumbnailProgressBar.innerText = data.progress;
+            thumbnailProgressBar.style.width = data.progress;
+            if (data.progress === "100%") {
+                clearInterval(thumbnailProgressRequestInterval);
+                requestDetails(id);
+                resizeProgressRequestInterval = setInterval(()=>requestResizeProgress(id),1000);
+            }
+        });
+    }
+
     function requestDetails(id){
         fetch(`/video/${id}`)
         .then(res=>res.json())
         .then(data=>{
-            originalSrc.src = data.original.videoUrl;
-            resizedSrc.src = data.resized.videoUrl;
-            img.src = data.thumbnailUrl;
-            originalVideo.load();
-            originalVideo.play();
-            resizedVideo.load();
-            resizedVideo.play();
+            if(data.thumbnailUrl){
+                clearInterval(requestResizeProgress);
+                img.src = data.thumbnailUrl;
+            }
+            if (data.original.videoUrl && !originalSrc.src){
+                originalSrc.src = data.original.videoUrl;
+                originalVideo.load();
+                originalVideo.play();
+            }
+            if (data.resized.videoUrl){
+                clearInterval(requestThumbnailProgress);
+                resizedSrc.src = data.resized.videoUrl;
+                clearInterval(resizeProgressRequestInterval);
+                resizedVideo.load();
+                resizedVideo.play();
+            }
         })
     }
 }

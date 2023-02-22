@@ -32,7 +32,7 @@ public class VideoThumbnailServiceTest {
     @BeforeEach
     public void setup(){
         MockitoAnnotations.openMocks(this);
-        videoThumbnailService = new DefaultVideoThumbnailService(videoUploadHelper);
+        videoThumbnailService = new DefaultVideoThumbnailService(videoUploadHelper, videoDao);
     }
 
     @Test

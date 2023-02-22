@@ -61,7 +61,7 @@ public class VideoResizeServiceTest {
         when(videoDao.getById(3L))
         .thenReturn(null);
 
-        when(videoUploadHelper.getResizedPathFromUrl(videoUrl)).thenReturn("/usr/local/shoplive/video/test_sample.mp4");
+        when(videoUploadHelper.getSavedPathFromUrl(videoUrl)).thenReturn("/usr/local/shoplive/video/test_sample.mp4");
         when(videoUploadHelper.getResizeProgress("/usr/local/shoplive/video/test_sample.mp4")).thenReturn(30);
         
         assertEquals("100%", videoResizeService.getProgress(1L).getProgress());

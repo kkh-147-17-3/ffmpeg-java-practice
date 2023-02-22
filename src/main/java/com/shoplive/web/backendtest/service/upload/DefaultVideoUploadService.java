@@ -8,23 +8,34 @@ import java.nio.file.StandardCopyOption;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.shoplive.web.backendtest.exception.ThumbnailUploadException;
 import com.shoplive.web.backendtest.exception.VideoUploadException;
 import com.shoplive.web.backendtest.helper.StorageProperties;
+import com.shoplive.web.backendtest.request.VideoUploadRequest;
+import com.shoplive.web.backendtest.response.VideoUploadResponse;
+import com.shoplive.web.backendtest.service.VideoService;
+import com.shoplive.web.backendtest.service.resize.VideoResizeService;
+import com.shoplive.web.backendtest.service.thumbnail.VideoThumbnailService;
 
 @Service
 public class DefaultVideoUploadService implements VideoUploadService {
 
     private final Path rootLocation;
+    private final VideoService videoService;
+    private final VideoThumbnailService thumbnailService;
+    private final VideoResizeService resizeService;
     
-    public DefaultVideoUploadService(StorageProperties properties) throws IOException {
-    
+    public DefaultVideoUploadService(StorageProperties properties, VideoService videoService
+                        ,VideoThumbnailService thumbnailService, VideoResizeService resizeService) throws IOException {
+        
         this.rootLocation = Paths.get(properties.getVideoUploadDir()).toAbsolutePath().normalize();
-        System.out.println(this.rootLocation);
-        Files.createDirectories(this.rootLocation);
-
+        this.videoService = videoService;
+        this.thumbnailService = thumbnailService;
+        this.resizeService = resizeService;
     }
 
     @Override
@@ -36,13 +47,23 @@ public class DefaultVideoUploadService implements VideoUploadService {
         }
         catch (IOException e)
         {
-            throw new VideoUploadException ("Could not initialize storage");
+            throw new VideoUploadException ("업로드 저장 경로를 초기화할 수 없습니다.");
         }
     }
 
-
     @Override
-    public String create(MultipartFile videoFile) {
+    @Transactional(rollbackFor = Exception.class)
+    public VideoUploadResponse upload(MultipartFile videoFile, VideoUploadRequest request) {
+        String fileName = StringUtils.cleanPath(videoFile.getOriginalFilename());
+        Long videoId = create(videoFile, request);
+        createThumbnail(videoId, fileName);
+        createResized(videoId, fileName);
+        return VideoUploadResponse.builder().id(videoId).build();             
+    }
+
+    // 생성된 파일의 videoId 반환
+    @Override
+    public Long create(MultipartFile videoFile, VideoUploadRequest request) {
         
         // Normalize file name
         String fileName = StringUtils.cleanPath(videoFile.getOriginalFilename());
@@ -60,14 +81,38 @@ public class DefaultVideoUploadService implements VideoUploadService {
                 throw new VideoUploadException ("Not Allowed File Extension Type: " + ext);
             }            
 
-            // Copy file to the target location (Replacing existing file with the same name)
             Path targetLocation = this.rootLocation.resolve(fileName);
             Files.copy(videoFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException e)
         {
-            throw new VideoUploadException ("Failed to store file " + videoFile.getOriginalFilename());
+            throw new VideoUploadException ("파일을 저장하는데 실패했습니다. " + videoFile.getOriginalFilename());
         }
-        return fileName;
+        Long videoId = videoService.insert(fileName, request).getId();
+        return videoId;
+    }
+
+    @Override
+    public void createResized(Long videoId, String fileName){
+        try {
+            int result = resizeService.createResized(fileName)
+                    .thenApply(resizedFileName-> videoService.updateResizedInfo(videoId, resizedFileName))
+                    .get();
+            if (result != 1) throw new Exception();
+        } catch (Exception e) {
+            throw new VideoUploadException("리사이징 정보 업데이트에 실패했습니다.");
+        } 
+    }
+
+    @Override
+    public void createThumbnail(Long videoId, String fileName){
+        createResized(videoId, fileName);
+        try {
+            String thumbnailFileName = thumbnailService.createThumbnail(fileName);
+            int result = videoService.updateThumbnailUrl(videoId, thumbnailFileName);
+            if(result != 1) throw new ThumbnailUploadException("썸네일 정보 업데이트에 실패했습니다");
+        } catch (IOException e){
+            throw new ThumbnailUploadException("썸네일 생성에 실패했습니다.");
+        }
     }
 }

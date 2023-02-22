@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.mapper;
+package com.shoplive.web.backendtest.unit.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,12 +7,13 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.mapper.VideoMapper;
+import com.shoplive.web.backendtest.mapper.VideoMapperImpl;
 import com.shoplive.web.backendtest.response.VideoDetailsResponse;
 
 public class VideoMapperTest {
     
     private final VideoMapper mapper = new VideoMapperImpl();
-
 
     @Test
     public void videoToVideoDetailsResponseTest(){

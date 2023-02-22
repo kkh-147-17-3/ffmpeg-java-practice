@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.helper;
+package com.shoplive.web.backendtest.unit.helper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.opentest4j.TestAbortedException;
+
+import com.shoplive.web.backendtest.helper.FfmpegVideoResizer;
+import com.shoplive.web.backendtest.helper.ProgressHandler;
 
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFprobe;

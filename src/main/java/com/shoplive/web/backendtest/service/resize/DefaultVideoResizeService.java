@@ -1,5 +1,8 @@
 package com.shoplive.web.backendtest.service.resize;
 
+import java.util.concurrent.CompletableFuture;
+
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.shoplive.web.backendtest.dao.VideoDao;
@@ -20,10 +23,11 @@ public class DefaultVideoResizeService implements VideoResizeService {
     private final VideoDao videoDao;
 
     @Override
-    public String createResized(String originalFileName) {
+    @Async("threadPoolTaskExecutor")
+    public CompletableFuture<String> createResized(String originalFileName) {
         
-        return videoUploadHelper.resizeWidth(originalFileName, resizedWidth);
-
+        String resultFileName = videoUploadHelper.resizeWidth(originalFileName, resizedWidth);
+        return CompletableFuture.completedFuture(resultFileName);
     }
 
     @Override

@@ -1,9 +1,7 @@
-package com.shoplive.web.backendtest.controller;
+package com.shoplive.web.backendtest.unit.controller;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -27,10 +25,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.controller.VideoUploadController;
 import com.shoplive.web.backendtest.request.VideoUploadRequest;
 import com.shoplive.web.backendtest.response.VideoDetailsResponse;
 import com.shoplive.web.backendtest.response.VideoProgressResponse;
+import com.shoplive.web.backendtest.response.VideoUploadResponse;
 import com.shoplive.web.backendtest.service.VideoService;
 import com.shoplive.web.backendtest.service.resize.VideoResizeService;
 import com.shoplive.web.backendtest.service.thumbnail.VideoThumbnailService;
@@ -82,17 +81,17 @@ public class VideoUploadControllerTest {
         MockMultipartFile videoFile = new MockMultipartFile(paramName,fileName,MediaType.MULTIPART_FORM_DATA_VALUE,bytes);
         MockMultipartFile requestJson = new MockMultipartFile("metaInfo", null, "application/json", "{\"title\": \"hello\"}".getBytes());
         
-        when(videoUploadService.create(any(MultipartFile.class))).
-            thenReturn("test_sample.mp4");
-        when(videoService.insert(anyString(),any(VideoUploadRequest.class))).
-            thenReturn(Video.builder().
-                            id(1L).
-                            build());
+        when(videoUploadService.upload(any(MultipartFile.class), any(VideoUploadRequest.class))).
+            thenReturn(VideoUploadResponse.builder().id(1L).build());
+        // when(videoService.insert(anyString(),any(VideoUploadRequest.class))).
+        //     thenReturn(Video.builder().
+        //                     id(1L).
+        //                     build());
 
-        when(videoResizeService.createResized("test_sample.mp4")).thenReturn("test_sample_360.mp4");
-        when(videoThumbnailService.createThumbnail("test_sample.mp4")).thenReturn("test_sample_thumb.mp4");
-        when(videoService.updateResizedInfo(anyLong(), anyString())).thenReturn(1);
-        when(videoService.updateThumbnailUrl(anyLong(), anyString())).thenReturn(1);
+        // when(videoResizeService.createResized("test_sample.mp4")).thenReturn("test_sample_360.mp4");
+        // when(videoThumbnailService.createThumbnail("test_sample.mp4")).thenReturn("test_sample_thumb.mp4");
+        // when(videoService.updateResizedInfo(anyLong(), anyString())).thenReturn(1);
+        // when(videoService.updateThumbnailUrl(anyLong(), anyString())).thenReturn(1);
         
         mvc.perform(
                         multipart("/video")

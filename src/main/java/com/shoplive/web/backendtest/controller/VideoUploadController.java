@@ -1,9 +1,5 @@
 package com.shoplive.web.backendtest.controller;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.shoplive.web.backendtest.exception.VideoUploadException;
 import com.shoplive.web.backendtest.request.VideoUploadRequest;
 import com.shoplive.web.backendtest.response.VideoDetailsResponse;
 import com.shoplive.web.backendtest.response.VideoProgressResponse;
+import com.shoplive.web.backendtest.response.VideoUploadResponse;
 import com.shoplive.web.backendtest.service.VideoService;
 import com.shoplive.web.backendtest.service.resize.VideoResizeService;
 import com.shoplive.web.backendtest.service.thumbnail.VideoThumbnailService;
@@ -42,28 +38,12 @@ public class VideoUploadController {
 
     @PostMapping (consumes = {"multipart/form-data"})
     @ResponseBody
-    public ResponseEntity<Object> createVideoFile(@RequestPart("metaInfo") VideoUploadRequest dto,
+    public ResponseEntity<Object> createVideoFile(@RequestPart("metaInfo") VideoUploadRequest uploadRequest,
                                 @RequestPart("videoFile") MultipartFile videoFile){
-        String fileName = uploadService.create(videoFile);
-        Long videoId = videoService.insert(fileName, dto).getId();
-        Thread thread = new Thread(()->{
-            try {
-                String thumbnailFileName = thumbnailService.createThumbnail(fileName);
-                videoService.updateThumbnailUrl(videoId, thumbnailFileName);
-                
-                String resizedFileName = resizeService.createResized(fileName);
-                videoService.updateResizedInfo(videoId, resizedFileName);
-                
-            } catch (IOException e){
-                throw new VideoUploadException("썸네일 생성에 실패했습니다.");
-            }
-        });
-        thread.start();
+
+        VideoUploadResponse response = uploadService.upload(videoFile, uploadRequest);
         
-        Map<String,Object> result = new HashMap<>();
-        result.put("id", videoId);
-        
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("{id}") 

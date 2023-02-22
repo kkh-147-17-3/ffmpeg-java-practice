@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.service.thumbnail;
+package com.shoplive.web.backendtest.unit.service.thumbnail;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -14,6 +14,8 @@ import org.mockito.MockitoAnnotations;
 import com.shoplive.web.backendtest.dao.VideoDao;
 import com.shoplive.web.backendtest.helper.VideoUploadHelper;
 import com.shoplive.web.backendtest.mapper.VideoMapper;
+import com.shoplive.web.backendtest.service.thumbnail.DefaultVideoThumbnailService;
+import com.shoplive.web.backendtest.service.thumbnail.VideoThumbnailService;
 
 public class VideoThumbnailServiceTest {
 

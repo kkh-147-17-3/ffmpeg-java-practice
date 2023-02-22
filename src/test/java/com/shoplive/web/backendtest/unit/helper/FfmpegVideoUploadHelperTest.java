@@ -1,4 +1,4 @@
-package com.shoplive.web.backendtest.helper;
+package com.shoplive.web.backendtest.unit.helper;
 
 public class FfmpegVideoUploadHelperTest {
     

@@ -17,7 +17,7 @@ public class DefaultVideoResizeService implements VideoResizeService {
     private final VideoUploadHelper videoUploadHelper;
     private final int resizedWidth = 360;
 
-    private final VideoDao dao;
+    private final VideoDao videoDao;
 
     @Override
     public String createResized(String originalFileName) {
@@ -29,7 +29,7 @@ public class DefaultVideoResizeService implements VideoResizeService {
     @Override
     public VideoProgressResponse getProgress(Long videoId) {
         Integer progress = null;
-        Video video = dao.getById(videoId);
+        Video video = videoDao.getById(videoId);
         if (video == null){
             throw new VideoUploadException("존재하지 않는 ID 입니다.");
         }
@@ -38,7 +38,7 @@ public class DefaultVideoResizeService implements VideoResizeService {
             progress = 100;           
         }
         else{
-            String videoPath = videoUploadHelper.getResizedPathFromUrl(video.getOriginalVideoUrl());
+            String videoPath = videoUploadHelper.getSavedPathFromUrl(video.getOriginalVideoUrl());
             progress = videoUploadHelper.getResizeProgress(videoPath);
         }
 

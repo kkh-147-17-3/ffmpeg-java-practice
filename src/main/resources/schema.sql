@@ -17,8 +17,6 @@ USE `shoplivedb` ;
 -- -----------------------------------------------------
 -- Table `shoplivedb`.`video`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `shoplivedb`.`video` ;
-
 CREATE TABLE IF NOT EXISTS `shoplivedb`.`video` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(255) NULL DEFAULT NULL,

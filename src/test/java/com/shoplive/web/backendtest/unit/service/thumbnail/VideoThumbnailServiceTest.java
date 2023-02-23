@@ -62,7 +62,7 @@ public class VideoThumbnailServiceTest {
         Video sampleVideo1 = Video.builder()
                                 .id(videoId1)
                                 .originalVideoUrl(originalVideoUrl)
-                                .resizedFilesize(100)
+                                .thumbnailUrl("http://localhost:8080/thumb")
                                 .build();
         Video sampleVideo2 = Video.builder()
                                 .id(videoId2)

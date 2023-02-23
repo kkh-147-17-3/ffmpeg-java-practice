@@ -9,22 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import com.shoplive.web.backendtest.exception.ThumbnailUploadException;
+import com.shoplive.web.backendtest.exception.VideoUploadException;
 import com.shoplive.web.backendtest.interfaces.ProgressibleVideoResizer;
 import com.shoplive.web.backendtest.interfaces.ProgressibleVideoThumbnailer;
 import com.shoplive.web.backendtest.model.VideoMetaInfo;
 import com.shoplive.web.backendtest.model.WebVideoMetaInfo;
 
 import jakarta.annotation.PostConstruct;
-import lombok.Getter;
 import lombok.Setter;
 
-
-@ConfigurationProperties(prefix="video")
-@Getter
 @Setter
+@ConfigurationProperties(prefix="video")
 public abstract class VideoUploadHelper {
 
-    private String originPath;
+    protected String originPath;
     private String videoUrl;
 
     @Autowired
@@ -40,9 +38,7 @@ public abstract class VideoUploadHelper {
     private String convertSavePath;
 
     @PostConstruct
-    public void init123(){
-        System.out.println("init: "+ convertSavePath);
-        System.out.println("init: " + thumbnailSavepath);
+    public void init(){
         Path resizedLocation = Paths.get(convertSavePath).toAbsolutePath().normalize();
         Path thumbnailLocation = Paths.get(thumbnailSavepath).toAbsolutePath().normalize();
         try {
@@ -50,16 +46,15 @@ public abstract class VideoUploadHelper {
                 Files.createDirectories(thumbnailLocation);
             }
         } catch (Exception ex) {
-            throw new ThumbnailUploadException("썸네일 생성 디렉토리를 추가하는 데 실패했습니다.");
+            throw new ThumbnailUploadException("썸네일 생성 디렉터리를 추가하는 데 실패했습니다.");
         }
 
         try{
-            if(!Files.exists(resizedLocation)){
-                Files.createDirectory(resizedLocation);
-            }
+            if(Files.exists(resizedLocation)) return;
+
+            Files.createDirectory(resizedLocation);
         } catch (Exception ex){
-            ex.printStackTrace();
-            // throw new VideoUploadException("리사이징 영상 생성 디렉토리를 추가하는 데 실패했습니다.");
+            throw new VideoUploadException("리사이징 영상 생성 디렉토리를 추가하는 데 실패했습니다.");
         }
 
     }
@@ -95,7 +90,7 @@ public abstract class VideoUploadHelper {
     }
 
     public WebVideoMetaInfo getWebVideoMetaInfoByFileName(String fileName){
-        VideoMetaInfo info = getMataInfoByFileName(fileName);
+        VideoMetaInfo info = getMetaInfoByFileName(fileName);
         String url = getVideoUrl(fileName);
         return WebVideoMetaInfo.builder()
                                 .filesize(info.getFilesize())
@@ -104,13 +99,13 @@ public abstract class VideoUploadHelper {
                                 .videoUrl(url)
                                 .build();
     }
+    
+    abstract public VideoMetaInfo getMetaInfoByFileName(String fileName);
 
     public Integer getResizeProgress(String videoPath){
         return videoResizer.getProgress(videoPath);
     }
     
-    abstract public VideoMetaInfo getMataInfoByFileName(String fileName);
-
     public Integer getThumbnailProgress(String thumbnailPath) {
         return videoThumbnailer.getProgress(thumbnailPath);
     }

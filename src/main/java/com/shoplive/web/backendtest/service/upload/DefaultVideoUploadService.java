@@ -93,14 +93,8 @@ public class DefaultVideoUploadService implements VideoUploadService {
 
     @Override
     public void createResized(Long videoId, String fileName){
-        try {
-            int result = resizeService.createResized(fileName)
-                    .thenApply(resizedFileName-> videoService.updateResizedInfo(videoId, resizedFileName))
-                    .get();
-            if (result != 1) throw new Exception();
-        } catch (Exception e) {
-            throw new VideoUploadException("리사이징 정보 업데이트에 실패했습니다.");
-        } 
+            resizeService.createResized(fileName)
+                    .thenAccept(resizedFileName-> videoService.updateResizedInfo(videoId, resizedFileName));
     }
 
     @Override

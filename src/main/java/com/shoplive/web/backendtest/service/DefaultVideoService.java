@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.shoplive.web.backendtest.dao.VideoDao;
 import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.exception.ThumbnailUploadException;
 import com.shoplive.web.backendtest.exception.VideoUploadException;
 import com.shoplive.web.backendtest.helper.VideoUploadHelper;
 import com.shoplive.web.backendtest.mapper.VideoMapper;
@@ -72,7 +73,7 @@ public class DefaultVideoService implements VideoService{
                             .build();
                             
         int result = dao.update(video);
-        if (result != 1) throw new VideoUploadException("썸네일 정보를 DB에 업데이트하는 데 실패했습니다.");
+        if (result != 1) throw new ThumbnailUploadException("썸네일 정보를 DB에 업데이트하는 데 실패했습니다.");
         
         return result;
     }

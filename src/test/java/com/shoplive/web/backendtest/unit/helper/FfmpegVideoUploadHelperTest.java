@@ -51,6 +51,7 @@ public class FfmpegVideoUploadHelperTest {
         videoUploadHelper.setThumbnailUrl("/thumb");
         videoUploadHelper.setConvertSavePath("/video/convert/");
         videoUploadHelper.setThumbnailSuffix("_thumb");
+        videoUploadHelper.setOriginUrl("http://localhost:8080");
         System.out.println(videoThumbnailer);
     }
 
@@ -72,13 +73,13 @@ public class FfmpegVideoUploadHelperTest {
     @Test 
     public void getVideoUrlTest(){
         String result = videoUploadHelper.getVideoUrl(targetFileName);
-        assertEquals("/video/" + targetFileName, result);
+        assertEquals("http://localhost:8080/video/" + targetFileName, result);
     }
 
     @Test 
     public void getThumbnailUrlTest(){
         String result = videoUploadHelper.getThumbnailUrl(targetFileName);
-        assertEquals("/thumb/" + targetFileName, result);
+        assertEquals("http://localhost:8080/thumb/" + targetFileName, result);
     }
 
     @Test
@@ -97,7 +98,7 @@ public class FfmpegVideoUploadHelperTest {
                                         .height(300)
                                         .build();
 
-        String resultUrl = "/video/test_sample.mp4";
+        String resultUrl = "http://localhost:8080/video/test_sample.mp4";
         doReturn(info).when(spyHelper).getMetaInfoByFileName(targetFileName);
         
         WebVideoMetaInfo resultInfo = spyHelper.getWebVideoMetaInfoByFileName(targetFileName);

@@ -21,33 +21,33 @@ import com.shoplive.web.backendtest.service.VideoService;
 import com.shoplive.web.backendtest.service.resize.VideoResizeService;
 import com.shoplive.web.backendtest.service.thumbnail.VideoThumbnailService;
 
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class DefaultVideoUploadService implements VideoUploadService {
 
-    private final Path rootLocation;
     private final VideoService videoService;
     private final VideoThumbnailService thumbnailService;
     private final VideoResizeService resizeService;
-    
-    public DefaultVideoUploadService(StorageProperties properties, VideoService videoService
-                        ,VideoThumbnailService thumbnailService, VideoResizeService resizeService) throws IOException {
-        
-        this.rootLocation = Paths.get(properties.getVideoUploadDir()).toAbsolutePath().normalize();
-        this.videoService = videoService;
-        this.thumbnailService = thumbnailService;
-        this.resizeService = resizeService;
-    }
+    private final StorageProperties properties;
+    private Path rootLocation;
 
     @Override
-    public void init()
-    {
-        try
-        {
+    @PostConstruct
+    public void init() {
+        rootLocation = Paths.get(properties.getVideoUploadDir()).toAbsolutePath().normalize();
+        System.out.println("rootLocation: " + rootLocation.toString());
+        try {
+            if(Files.exists(rootLocation)) return;
+
             Files.createDirectory(rootLocation);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
+
+            e.printStackTrace();
             throw new VideoUploadException ("업로드 저장 경로를 초기화할 수 없습니다.");
+
         }
     }
 
@@ -69,24 +69,23 @@ public class DefaultVideoUploadService implements VideoUploadService {
         String fileName = StringUtils.cleanPath(videoFile.getOriginalFilename());
         try
         {
-            if (videoFile.isEmpty())
-            {
-                throw new VideoUploadException ("Failed to store empty file " + videoFile.getOriginalFilename());
+            if (videoFile.isEmpty()) {
+                throw new VideoUploadException ("비어있는 파일을 업로드할 수 없습니다. " + videoFile.getOriginalFilename());
             }
 
             String ext = FilenameUtils.getExtension(fileName);
 
             // mp4 확장자가 아닌 경우 예외처리
             if (!ext.equals("mp4")){
-                throw new VideoUploadException ("Not Allowed File Extension Type: " + ext);
+                throw new VideoUploadException ("지원하지 않는 확장자입니다. " + ext);
             }            
-
             Path targetLocation = this.rootLocation.resolve(fileName);
             Files.copy(videoFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException e)
         {
-            throw new VideoUploadException ("파일을 저장하는데 실패했습니다. " + videoFile.getOriginalFilename());
+            e.printStackTrace();
+            // throw new VideoUploadException ("파일을 저장하는데 실패했습니다. " + videoFile.getOriginalFilename() + " 사유 : " + e.getMessage().toString());
         }
         Long videoId = videoService.insert(fileName, request).getId();
         return videoId;

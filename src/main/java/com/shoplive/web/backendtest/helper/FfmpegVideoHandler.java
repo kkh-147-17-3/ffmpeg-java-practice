@@ -29,7 +29,6 @@ public class FfmpegVideoHandler {
         try {
             ffmpegProbeResult = ffProbe.probe(filePath);
         } catch (IOException e) {
-            System.out.println(filePath);
             throw new RuntimeException(e);
         }
 

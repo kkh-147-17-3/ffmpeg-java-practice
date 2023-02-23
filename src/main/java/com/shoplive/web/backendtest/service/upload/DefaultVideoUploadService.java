@@ -98,7 +98,6 @@ public class DefaultVideoUploadService implements VideoUploadService {
 
     @Override
     public void createThumbnail(Long videoId, String fileName){
-        createResized(videoId, fileName);
         try {
             String thumbnailFileName = thumbnailService.createThumbnail(fileName);
             int result = videoService.updateThumbnailUrl(videoId, thumbnailFileName);

@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.TestAbortedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.shoplive.web.backendtest.exception.VideoUploadException;
@@ -26,7 +26,6 @@ import com.shoplive.web.backendtest.request.VideoUploadRequest;
 import com.shoplive.web.backendtest.service.resize.VideoResizeService;
 import com.shoplive.web.backendtest.service.upload.VideoUploadService;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
 @SpringBootTest
@@ -43,7 +42,7 @@ public class VideoResizeServiceIntegerationTest {
     private MultipartFile videoFile;
     private Long videoId;
 
-    @PostConstruct
+    @BeforeEach
     void init(){
         String classPath = Paths.get("./").toAbsolutePath().normalize().toString();
         File file = new File(classPath + "/" + originalFileName);
@@ -75,7 +74,7 @@ public class VideoResizeServiceIntegerationTest {
         try {
             assertThrows(VideoUploadException.class,()->videoResizeService.getProgress(203L));
             videoResizeService.createResized(originalFileName);
-            Thread.sleep(2);
+            Thread.sleep(2000);
             assertNotEquals("0%",videoResizeService.getProgress(videoId).getProgress());
         } catch (Exception e) {
             Assertions.fail();

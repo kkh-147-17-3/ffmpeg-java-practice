@@ -4,11 +4,26 @@
 
 ## 1. 서버 구동 방법
 **1. repository를 clone 합니다.**
-``` 
-git clone https://github.com/kkh-147-17-3/backend-test.git
+```shell
+~/github$: git clone https://github.com/kkh-147-17-3/backend-test.git
 ```
 
-**2. clone한 directory의 /backend-test 에서 다음과 같이 docker를 구동합니다.**
+<br>
+
+**2. clone한 directory의 /backend-test 에서 spring boot project를 maven 빌드합니다.**
+```shell
+// linux
+~/backend-test$: mvn package
+```
+
+```powershell
+// windows
+PS C:\Users\kkh\github\backend-test> ./mvnw package
+
+```
+<br>
+
+**3. clone한 directory의 /backend-test 에서 다음과 같이 docker를 구동합니다.**
 ```
 docker-compose up --build
 ```
@@ -16,7 +31,7 @@ docker-compose up --build
 
 ## 2. 테스트 방법
 
-**1. 브라우저에 http://localhost:8080/video 입력하여 접속합니다.**
+**1. 브라우저에 http://localhost:8080/video 입력하여 페이지에 접속합니다.**
 
 <br>
 
@@ -51,9 +66,11 @@ docker-compose up --build
 
 <br>
 
-## 3. 단위 테스트 방법
+## 3. 단위 테스트 방법 (linux 환경)
 
-**1. clone한 directory의 /backend-test/의 src/main/resources 에 위치한 application.properties의 db 속성값을 test db가 위치한 곳으로 변경합니다.**
+**1. linux 환경에서repository를 clone 합니다.
+
+**2. clone한 directory의 /backend-test/의 src/main/resources 에 위치한 application.properties의 db 속성값을 test db가 위치한 곳으로 변경합니다.**
 
    - 아래의 application.properties 내용 참고
    ```
@@ -68,7 +85,7 @@ docker-compose up --build
    docker run --name mariadb -d -p 3306:3306 --restart=always -e MYSQL_ROOT_PASSWORD=1234 -e MARIADB_DATABASE=shoplivedb mariadb
    ```
 
-**2. clone한 directory의 /backend-test/에서 다음을 입력합니다. 이때 build 과정에서 junit 테스트가 시작됩니다.**
+**3. clone한 directory의 /backend-test/에서 다음을 입력합니다. 이때 build 과정에서 junit 테스트가 시작됩니다.**
 
 
 <br>
@@ -81,7 +98,7 @@ docker-compose up --build
 <br>
 
 
-**3. 다음의 경로에서 jacoco 의 테스트 커버리지 report를 확인합니다.**
+**4. 다음의 경로에서 jacoco 의 테스트 커버리지 report를 확인합니다.**
   ```
   target/site/jacoco/index.html
   ```

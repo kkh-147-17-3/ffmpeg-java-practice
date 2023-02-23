@@ -2,6 +2,7 @@ package com.shoplive.web.backendtest.unit.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -17,6 +18,8 @@ import org.mockito.MockitoAnnotations;
 
 import com.shoplive.web.backendtest.dao.VideoDao;
 import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.exception.ThumbnailUploadException;
+import com.shoplive.web.backendtest.exception.VideoUploadException;
 import com.shoplive.web.backendtest.helper.VideoUploadHelper;
 import com.shoplive.web.backendtest.model.WebVideoMetaInfo;
 import com.shoplive.web.backendtest.request.VideoUploadRequest;
@@ -134,6 +137,22 @@ public class VideoServiceTest {
     }
 
     @Test
+    void updateResizedInfoExceptionTest(){
+        String resizedFileName = "test_sample1_360.mp4";
+        Long videoId = sampleVideo.getId();
+        WebVideoMetaInfo resizedVideoMetaInfo = WebVideoMetaInfo.builder()
+                                                            .filesize(sampleVideo.getResizedFilesize())
+                                                            .width(sampleVideo.getResizedWidth())
+                                                            .height(sampleVideo.getResizedHeight())
+                                                            .videoUrl(sampleVideo.getResizedVideoUrl())
+                                                            .build();
+        when(videoUploadHelper.getWebVideoMetaInfoByFileName(resizedFileName))
+                            .thenReturn(resizedVideoMetaInfo);
+        when(videoDao.update(any(Video.class))).thenReturn(0);
+        assertThrows(VideoUploadException.class, ()->videoService.updateResizedInfo(videoId, resizedFileName));
+    }
+
+    @Test
     void updateThumbnailUrlTest(){
         String thumbnailFileName = "test_sample1_thumb.mp4";
         Long videoId = sampleVideo.getId();
@@ -144,5 +163,16 @@ public class VideoServiceTest {
 
         verify(videoDao, times(1)).update(any(Video.class));
         assertEquals(result, 1);
+    }
+
+    @Test
+    void updateThumbnailExceptionTest(){
+        String thumbnailFileName = "test_sample1_thumb.mp4";
+        Long videoId = sampleVideo.getId();
+        
+        when(videoDao.update(any(Video.class))).thenReturn(0);
+
+        assertThrows(ThumbnailUploadException.class, ()->videoService.updateThumbnailUrl(videoId, thumbnailFileName));
+
     }
 }

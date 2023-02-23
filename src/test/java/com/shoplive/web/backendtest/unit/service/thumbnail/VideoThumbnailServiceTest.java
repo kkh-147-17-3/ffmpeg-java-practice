@@ -1,6 +1,7 @@
 package com.shoplive.web.backendtest.unit.service.thumbnail;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -12,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.shoplive.web.backendtest.dao.VideoDao;
+import com.shoplive.web.backendtest.entity.Video;
+import com.shoplive.web.backendtest.exception.VideoUploadException;
 import com.shoplive.web.backendtest.helper.VideoUploadHelper;
 import com.shoplive.web.backendtest.mapper.VideoMapper;
 import com.shoplive.web.backendtest.service.thumbnail.DefaultVideoThumbnailService;
@@ -48,5 +51,39 @@ public class VideoThumbnailServiceTest {
             Assertions.fail();
         }
         assertEquals("test_sample_thumb.gif", result);
+    }
+
+    @Test
+    void getThumbnailProgerssTest(){
+        Long videoId1 = 1L;
+        Long videoId2 = 2L;
+        String originalVideoUrl = "test.mp4";
+        String savedPath = "/usr/local/video/test.mp4";
+        Video sampleVideo1 = Video.builder()
+                                .id(videoId1)
+                                .originalVideoUrl(originalVideoUrl)
+                                .resizedFilesize(100)
+                                .build();
+        Video sampleVideo2 = Video.builder()
+                                .id(videoId2)
+                                .originalVideoUrl(originalVideoUrl)
+                                .build();
+        when(videoDao.getById(videoId1)).thenReturn(sampleVideo1);
+        when(videoDao.getById(videoId2)).thenReturn(sampleVideo2);
+        when(videoUploadHelper.getSavedPathFromUrl(originalVideoUrl)).thenReturn(savedPath);
+        when(videoUploadHelper.getThumbnailProgress(savedPath)).thenReturn(30);
+    
+        assertEquals("100%", videoThumbnailService.getProgress(videoId1).getProgress());
+        assertEquals("30%",videoThumbnailService.getProgress(videoId2).getProgress());
+    
+    }
+
+    @Test
+    void getThumbnailProgerssExceptionTest(){
+        Long videoId1 = 1L;
+
+        when(videoDao.getById(videoId1)).thenReturn(null);
+       
+        assertThrows(VideoUploadException.class, () -> videoThumbnailService.getProgress(videoId1));
     }
 }

@@ -122,7 +122,7 @@ public class VideoUploadControllerTest {
     }
 
     @Test
-    void getProgressTest(){
+    void getResizeProgressTest(){
         Long videoId = 1L;
         VideoProgressResponse response = VideoProgressResponse.builder()
                                     .id(videoId)
@@ -141,22 +141,23 @@ public class VideoUploadControllerTest {
         }
     }
 
-
-    // @Test
-    // void blockOversizedFileUploadTest() throws Exception{
-    //     byte[] bytes = new byte[1024 * 1024 * 10001];
-    //     String paramName = "videoFile";
-
-    //     MockMultipartFile videoFile = new MockMultipartFile(paramName,"test_sample.mp4",MediaType.MULTIPART_FORM_DATA_VALUE,bytes);
-    //     MockMultipartFile requestJson = new MockMultipartFile("metaInfo", null, "application/json", "{\"title\": \"hello\"}".getBytes());
-
-    //     bytes = new byte[1024 * 1024 * 101];
-    //     mvc.perform(
-    //         multipart("/video")
-    //         .file(videoFile).file(requestJson)
-    //     ).andExpect(status().isForbidden());
-    // }
-
-    
-    
+    @Test
+    void getThumbnailProgressTest(){
+        Long videoId = 1L;
+        VideoProgressResponse response = VideoProgressResponse.builder()
+                                    .id(videoId)
+                                    .progress("100%")
+                                    .build();
+        when(videoThumbnailService.getProgress(videoId)).thenReturn(response);
+        try{
+            mvc.perform(get("/video/" + String.valueOf(videoId) + "/thumbnail/progress").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id",equalTo(1)))
+                .andExpect(jsonPath("$.progress",equalTo("100%")));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            Assertions.fail();
+        }
+    }    
 }

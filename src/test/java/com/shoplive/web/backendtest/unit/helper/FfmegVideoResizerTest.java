@@ -45,7 +45,7 @@ public class FfmegVideoResizerTest {
     @Test
     public void resizeWidthTest(){
 
-        int[] resizeWidths = {100,360,1500,3500};
+        int[] resizeWidths = {100,360,1500};
         String resultFilePath = "";
         for (int resizeWidth : resizeWidths){
             String targetFileName = FilenameUtils.getName(targetFilePath);

@@ -1,5 +1,6 @@
 package com.shoplive.web.backendtest.unit.mapper;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
@@ -34,6 +35,9 @@ public class VideoMapperTest {
                             .build();
         
         VideoDetailsResponse response = mapper.getDetailsResponseFromEntity(video);
+        VideoDetailsResponse nullResponse = mapper.getDetailsResponseFromEntity(null);
+
+        assertNull(nullResponse);
 
         assertEquals(video.getId(),response.getId());
         assertEquals(video.getTitle(),response.getTitle(),response.getTitle());

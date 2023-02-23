@@ -52,7 +52,7 @@ public class VideoUploadServiceTest {
         MockitoAnnotations.openMocks(this);
         StorageProperties properties = new StorageProperties();
         properties.setVideoUploadDir("/usr/local/test");
-        videoUploadService = new DefaultVideoUploadService(properties, videoService, videoThumbnailService, videoResizeService);
+        videoUploadService = new DefaultVideoUploadService(videoService, videoThumbnailService, videoResizeService, properties);
     }
 
     @Test

@@ -25,7 +25,6 @@ public class DefaultVideoResizeService implements VideoResizeService {
     @Override
     @Async("threadPoolTaskExecutor")
     public CompletableFuture<String> createResized(String originalFileName) {
-        
         String resultFileName = videoUploadHelper.resizeWidth(originalFileName, resizedWidth);
         return CompletableFuture.completedFuture(resultFileName);
     }

@@ -38,7 +38,6 @@ public class DefaultVideoUploadService implements VideoUploadService {
     @PostConstruct
     public void init() {
         rootLocation = Paths.get(properties.getVideoUploadDir()).toAbsolutePath().normalize();
-        System.out.println("rootLocation: " + rootLocation.toString());
         try {
             if(Files.exists(rootLocation)) return;
 
@@ -99,7 +98,6 @@ public class DefaultVideoUploadService implements VideoUploadService {
 
     @Override
     public void createThumbnail(Long videoId, String fileName){
-        createResized(videoId, fileName);
         try {
             String thumbnailFileName = thumbnailService.createThumbnail(fileName);
             int result = videoService.updateThumbnailUrl(videoId, thumbnailFileName);

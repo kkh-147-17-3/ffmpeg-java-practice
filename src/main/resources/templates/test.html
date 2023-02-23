@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="bold">
-                        업로드 리자이징 영상
+                        업로드 리사이징 영상
                         <video width="300" controls id="resized-video">
                             <source id="resized-source" type="video/mp4">
                         </video>
@@ -153,8 +153,17 @@ window.addEventListener('load', () => {
         }
         let interval;
         fetch('video', option)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok){
+                    return res.text();
+                }
+                else return res.json();
+            })
             .then(data => {
+                if (!data.id) {
+                    alert(data);
+                    return;
+                }
                 const id = data.id;
                 resizeProgressBar.innerText = "0%";
                 resizeProgressBar.style.width = "0%";
@@ -164,14 +173,22 @@ window.addEventListener('load', () => {
                 thumbnailProgressRequestInterval = setInterval(() => {
                     requestThumbnailProgress(id);
                 }, 1000);
-            });
+            })
 
     }
     function requestResizeProgress(id) {
         fetch(`/video/${id}/progress`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok){
+                    return res.text();
+                }
+                else return res.json();
+            })
             .then(data => {
-                console.log(data);
+                if (!data.id) {
+                    alert(data);
+                    return;
+                }
                 resizeProgressBar.innerText = data.progress;
                 resizeProgressBar.style.width = data.progress;
                 if (data.progress === "100%") {
@@ -182,8 +199,18 @@ window.addEventListener('load', () => {
 
     function requestThumbnailProgress(id) {
         fetch(`/video/${id}/thumbnail/progress`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok){
+                    return res.text();
+                }
+                else return res.json();
+            })
             .then(data => {
+                if (!data.id) {
+                    alert(data);
+                    return;
+                }
+
                 thumbnailProgressBar.innerText = data.progress;
                 thumbnailProgressBar.style.width = data.progress;
                 if (data.progress === "100%") {
@@ -202,8 +229,18 @@ window.addEventListener('load', () => {
 
     function requestDetails(id) {
         fetch(`/video/${id}`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok){
+                    return res.text();
+                }
+                else return res.json();
+            })
             .then(data => {
+                if (!data.id) {
+                    alert(data);
+                    return;
+                }
+
 
                 videoId.innerText = data.id;
                 title.innerText = data.title;

@@ -2,12 +2,12 @@ version: '3'
 
 services:
   database:
-    container_name: mysql_db
-    image: mysql:5.7
+    container_name: maria_db
+    image: mariadb:latest
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: shoplivedb
-      c: 1234
+      MARIADB_DATABASE: shoplivedb
+      MARIADB_ROOT_PASSWORD: 1234
       TZ: 'Asia/Seoul'
     ports:
       - "3306:3306"
@@ -16,7 +16,7 @@ services:
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
     networks:
-      - springmysql-net
+      - springmariadb-net
 
   application:
     build: .
@@ -25,13 +25,13 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://mysql_db:3306/shoplivedb?useSSL=false
+      SPRING_DATASOURCE_URL: jdbc:mariadb://maria_db:3306/shoplivedb?useSSL=false
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "1234"
     depends_on:
       - database
     networks:
-      - springmysql-net
+      - springmariadb-net
 
 networks:
-  springmysql-net:
+  springmariadb-net:

@@ -60,17 +60,6 @@ public class FfmpegVideoThumbnailer extends FfmpegVideoHandler implements Progre
 
                 progressHandler.updateProgress(targetFilePath, percentage);
                 
-
-                // Print out interesting information about the progress
-                
-                System.out.println(String.format(
-                    "[%d] thumbnail status:%s frame:%d fps:%.0f speed:%.2fx",
-                    percentage,
-                    progress.status,
-                    progress.frame,
-                    progress.fps.doubleValue(),
-                    progress.speed
-                ));
             }
         });
         

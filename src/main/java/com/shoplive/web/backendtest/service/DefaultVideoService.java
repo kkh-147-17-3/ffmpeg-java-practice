@@ -83,7 +83,6 @@ public class DefaultVideoService implements VideoService{
     public VideoDetailsResponse getDetails(Long id) {
         
         Video video = dao.getById(id);
-        System.out.println(video);
         return videoMapper.getDetailsResponseFromEntity(video);
     }
 }

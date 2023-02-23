@@ -62,11 +62,12 @@ public class FfmpegVideoResizer extends FfmpegVideoHandler implements Progressib
                 
                 int percentage = 0;
 
-                if (progress.status == Status.END) {                        
-                    percentage = 100;
+                if (progress.status == Status.END) {           
+                    percentage = 100;             
+                    progressHandler.deleteProgress(targetFilePath);
                 }
                 else{
-                    percentage = (int) (progress.out_time_ns / durationNanosecs * 100);
+                    percentage = (int) Math.round(progress.out_time_ns / durationNanosecs * 100);
                 } 
 
                 progressHandler.updateProgress(targetFilePath, percentage);

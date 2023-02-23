@@ -50,11 +50,12 @@ public class FfmpegVideoThumbnailer extends FfmpegVideoHandler implements Progre
                 
                 int percentage = 0;
 
-                if (progress.status == Status.END) {                        
-                    percentage = 100;
+                if (progress.status == Status.END) {           
+                    percentage = 100;             
+                    progressHandler.deleteProgress(targetFilePath);
                 }
                 else{
-                    percentage = (int) (progress.out_time_ns / durationNanosecs * 100);
+                    percentage = (int) Math.round(progress.out_time_ns / durationNanosecs * 100);
                 } 
 
                 progressHandler.updateProgress(targetFilePath, percentage);

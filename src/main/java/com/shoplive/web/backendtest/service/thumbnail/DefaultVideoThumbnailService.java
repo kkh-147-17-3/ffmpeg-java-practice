@@ -36,8 +36,8 @@ public class DefaultVideoThumbnailService implements VideoThumbnailService {
             progress = 100;           
         }
         else{
-            String thumbnailPath = videoUploadHelper.getSavedPathFromUrl(video.getOriginalVideoUrl());
-            progress = videoUploadHelper.getThumbnailProgress(thumbnailPath);
+            String videoPath = videoUploadHelper.getSavedPathFromUrl(video.getOriginalVideoUrl());
+            progress = videoUploadHelper.getThumbnailProgress(videoPath);
         }
 
         String progressWithPercent = String.valueOf(progress) + "%";

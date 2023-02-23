@@ -13,8 +13,8 @@ public class FfmpegVideoUploadHelper extends VideoUploadHelper{
     private final FfmpegVideoHandler ffmpegVideoHandler;
 
     @Override
-    public VideoMetaInfo getMataInfoByFileName(String fileName) {
-        String filePath = this.getOriginPath() + fileName;
+    public VideoMetaInfo getMetaInfoByFileName(String fileName) {
+        String filePath = this.originPath + fileName;
         return ffmpegVideoHandler.getMetaInfoFromProbeResult(filePath);
     }
     

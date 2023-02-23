@@ -52,7 +52,6 @@ public class FfmpegVideoUploadHelperTest {
         videoUploadHelper.setConvertSavePath("/video/convert/");
         videoUploadHelper.setThumbnailSuffix("_thumb");
         videoUploadHelper.setOriginUrl("http://localhost:8080");
-        System.out.println(videoThumbnailer);
     }
 
     @Test

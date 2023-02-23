@@ -38,7 +38,6 @@ public class DefaultVideoUploadService implements VideoUploadService {
     @PostConstruct
     public void init() {
         rootLocation = Paths.get(properties.getVideoUploadDir()).toAbsolutePath().normalize();
-        System.out.println("rootLocation: " + rootLocation.toString());
         try {
             if(Files.exists(rootLocation)) return;
 

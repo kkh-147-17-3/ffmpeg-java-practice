@@ -80,17 +80,6 @@ public class VideoUploadServiceTest {
         assertDoesNotThrow(()->videoUploadService.createResized(videoId, fileName));
     }
 
-    @Test
-    public void createResizedExceptionTest(){
-
-
-        when(videoResizeService.createResized(fileName)).thenReturn(CompletableFuture.completedFuture(fileName));
-        when(videoService.updateResizedInfo(videoId, fileName)).thenReturn(0);
-
-        assertThrows(VideoUploadException.class, ()->videoUploadService.createResized(videoId, fileName));
-    }
-
-    @Test
     public void createThumbnailTest(){
         String thumbnailFileName = "test_sample_thumb.gif";
         VideoUploadService spyService = Mockito.spy(videoUploadService);

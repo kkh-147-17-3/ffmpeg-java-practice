@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shoplive.web.backendtest.dao.VideoDao">
+    <insert id="insert" parameterType="Video" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO video
+            (title, original_filesize, original_width, original_height, original_video_url,
+            resized_filesize, resized_width, resized_height, resized_video_url, thumbnail_url)
+        VALUES(#{title}, #{originalFilesize}, #{originalWidth}, #{originalHeight}, #{originalVideoUrl},
+            #{resizedFilesize},#{resizedWidth},#{resizedHeight},#{resizedVideoUrl},#{thumbnailUrl})
+    </insert>
+    <update id="update" parameterType="Video">
+        UPDATE video
+        <set>
+            <if test="title != null">title=#{title},</if>
+            <if test="originalFilesize != 0">original_filesize=#{originalFilesize},</if>
+            <if test="originalWidth != 0">original_width=#{originalWidth},</if>
+            <if test="originalHeight != 0">original_height=#{originalHeight},</if>
+            <if test="originalVideoUrl != null and !originalVideoUrl.equals('')">original_video_url=#{originalVideoUrl},</if>
+            <if test="resizedFilesize != 0">resized_filesize=#{resizedFilesize},</if>
+            <if test="resizedWidth != 0">resized_width=#{resizedWidth},</if>
+            <if test="resizedHeight != 0">resized_height=#{resizedHeight},</if>
+            <if test="resizedVideoUrl != null and !resizedVideoUrl.equals('')">resized_video_url=#{resizedVideoUrl},</if>
+            <if test="thumbnailUrl != null and !thumbnailUrl.equals('')">thumbnail_url=#{thumbnailUrl}</if>         
+        </set>
+        WHERE id=#{id}
+    </update>
+    <select id="getById" resultType="Video">
+        SELECT *
+        FROM video
+        WHERE id=#{id}
+    </select>
+
+</mapper>

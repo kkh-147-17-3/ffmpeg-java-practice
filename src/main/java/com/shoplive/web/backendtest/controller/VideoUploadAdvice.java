@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import com.shoplive.web.backendtest.exception.ThumbnailUploadException;
 import com.shoplive.web.backendtest.exception.VideoUploadException;
@@ -28,5 +29,11 @@ public class VideoUploadAdvice {
     @ResponseBody
     public ResponseEntity<String> thumbnailUploadExceptionHandler(Exception e){
         return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    @ResponseBody
+    public ResponseEntity<String> missingServletRequestPartExceptionHandler(Exception e){
+        return new ResponseEntity<>("업로드된 파일이 존재하지 않습니다.", HttpStatus.FORBIDDEN);
     }
 }

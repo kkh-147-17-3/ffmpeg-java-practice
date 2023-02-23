@@ -32,7 +32,7 @@ public class DefaultVideoThumbnailService implements VideoThumbnailService {
             throw new VideoUploadException("존재하지 않는 ID 입니다.");
         }
 
-        if (video.getResizedFilesize() != 0){
+        if (video.getThumbnailUrl() != null){
             progress = 100;           
         }
         else{

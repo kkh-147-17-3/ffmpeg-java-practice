@@ -24,7 +24,7 @@ public abstract class VideoUploadHelper {
 
     protected String originPath;
     private String videoUrl;
-
+    private String originUrl;
     @Autowired
     private ProgressibleVideoResizer videoResizer;
 
@@ -77,11 +77,11 @@ public abstract class VideoUploadHelper {
     }
 
     public String getVideoUrl(String fileName){
-        return videoUrl + "/" + fileName;
+        return originUrl + videoUrl + "/" + fileName;
     }
 
     public String getThumbnailUrl(String fileName){
-        return thumbnailUrl + "/" + fileName;
+        return originUrl + thumbnailUrl + "/" + fileName;
     }
 
     public String getSavedPathFromUrl(String url){

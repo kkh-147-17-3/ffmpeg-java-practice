@@ -96,7 +96,7 @@ video.thumbnail-url=/path/to/thumbnail
 
 ## 3. 단위 테스트 방법 (linux 환경)
 
-**1. linux 환경에서repository를 clone 합니다.
+**1. linux 환경에서repository를 clone 합니다.**
 
 **2. clone한 directory의 /backend-test/의 src/main/resources 에 위치한 application.properties의 db 속성값을 test db가 위치한 곳으로 변경합니다.**
 
@@ -113,7 +113,7 @@ video.thumbnail-url=/path/to/thumbnail
    docker run --name mariadb -d -p 3306:3306 --restart=always -e MYSQL_ROOT_PASSWORD=1234 -e MARIADB_DATABASE=shoplivedb mariadb
    ```
 
-**3. pom.xml에서 아래 <plugin>의 <skipTests> 부분을 주석처리합니다.
+**3. pom.xml에서 아래 <plugin>의 <skipTests> 부분을 주석처리합니다.**
 
 ```xml
 			<plugin>

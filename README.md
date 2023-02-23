@@ -28,6 +28,34 @@ PS C:\Users\kkh\github\backend-test> ./mvnw package
 docker-compose up --build
 ```
 
+**4. 파일 저장경로 및 url 구조는 application.properties에 다음과 같이 정의되어 있습니다.
+
+```properties
+## 업로드된 파일이 저장되는 위치입니다.
+file.video-upload-dir=/usr/local/shoplive/video/
+
+## 리사이징 및 썸네일 생성 대상 video 파일이 위치한 경로입니다. 위와 동일하게 설정되어 있습니다.
+video.origin-path=${file.video-upload-dir}
+
+## 리사이징된 video file이 저장되는 경로입니다. 업로드된 video 파일이 저장되는 경로와 동리하게 설정되어 있습니다.
+video.convert-save-path=${file.video-upload-dir}
+
+## 생성된 thumbnail이 저장되는 경로입니다.
+video.thumbnail-save-path=/usr/local/shoplive/thumbnail/
+
+## thumbnail 생성 시 파일명에 추가되는 접미사입니다.
+video.thumbnail-suffix=_thumb
+
+## video 파일의 domain 주소입니다.
+video.origin-url=http://localhost:8080
+
+## video 파일의 url 위치입니다.
+video.video-url=/path/to/video
+
+## thumbnail 파일의 url 위치입니다.
+video.thumbnail-url=/path/to/thumbnail
+```
+
 
 ## 2. 테스트 방법
 
@@ -85,13 +113,28 @@ docker-compose up --build
    docker run --name mariadb -d -p 3306:3306 --restart=always -e MYSQL_ROOT_PASSWORD=1234 -e MARIADB_DATABASE=shoplivedb mariadb
    ```
 
-**3. clone한 directory의 /backend-test/에서 다음을 입력합니다. 이때 build 과정에서 junit 테스트가 시작됩니다.**
+**3. pom.xml에서 아래 <plugin>의 <skipTests> 부분을 주석처리합니다.
+
+```xml
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.0</version>
+				<configuration>
+        			<useSystemClassLoader>false</useSystemClassLoader>
+        			<!-- <skipTests>true</skipTests> -->
+				</configuration>
+			</plugin>
+```
+
+
+**4. clone한 directory의 /backend-test/에서 다음을 입력합니다. 이때 build 과정에서 junit 테스트가 시작됩니다.**
 
 
 <br>
 
   ```
-  mvn pakckage
+  mvn clean pakckage
   ```
   * test과정에서 오류가 발생한 경우 test를 root 권한으로 실행합니다.
 

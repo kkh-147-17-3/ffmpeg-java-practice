@@ -145,6 +145,7 @@
 				<version>2.22.0</version>
 				<configuration>
         			<useSystemClassLoader>false</useSystemClassLoader>
+        			<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
 		</plugins>

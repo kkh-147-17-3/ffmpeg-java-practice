@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: shoplivedb
-      MYSQL_ROOT_PASSWORD: 1234
+      c: 1234
       TZ: 'Asia/Seoul'
     ports:
       - "3306:3306"

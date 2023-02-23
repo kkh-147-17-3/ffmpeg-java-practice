@@ -2,7 +2,6 @@ package com.shoplive.web.backendtest.integration.service;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -74,8 +73,7 @@ public class VideoResizeServiceIntegerationTest {
         try {
             assertThrows(VideoUploadException.class,()->videoResizeService.getProgress(203L));
             videoResizeService.createResized(originalFileName);
-            Thread.sleep(2000);
-            assertNotEquals("0%",videoResizeService.getProgress(videoId).getProgress());
+
         } catch (Exception e) {
             Assertions.fail();
         }

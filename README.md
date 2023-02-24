@@ -28,7 +28,7 @@ PS C:\Users\kkh\github\backend-test> ./mvnw package
 docker-compose up --build
 ```
 
-**4. 파일 저장경로 및 url 구조는 application.properties에 다음과 같이 정의되어 있습니다.**
+**4. 업로드 및 변환된 .mp4 파일, thumbnail 이 저장되는 경로 및 url 구조는 application.properties에 다음과 같이 정의되어 있습니다.**
 
 ```properties
 ## 업로드된 파일이 저장되는 위치입니다.

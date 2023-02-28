@@ -37,7 +37,7 @@ file.video-upload-dir=/usr/local/shoplive/video/
 ## 리사이징 및 썸네일 생성 대상 video 파일이 위치한 경로입니다. 위와 동일하게 설정되어 있습니다.
 video.origin-path=${file.video-upload-dir}
 
-## 리사이징된 video file이 저장되는 경로입니다. 업로드된 video 파일이 저장되는 경로와 동리하게 설정되어 있습니다.
+## 리사이징된 video file이 저장되는 경로입니다. 업로드된 video 파일이 저장되는 경로와 동일하게 설정되어 있습니다.
 video.convert-save-path=${file.video-upload-dir}
 
 ## 생성된 thumbnail이 저장되는 경로입니다.
@@ -74,7 +74,7 @@ video.thumbnail-url=/path/to/thumbnail
   ![image](https://user-images.githubusercontent.com/102606939/220872185-7a5a04c0-3e98-4685-ab8b-c4f626291181.png)
 
   + 업로드에 성공하면 서버에서는 thumbnail 생성 작업을 실행 후 resizing 작업을 비동기로 실행한 뒤 성공 response를 응답합니다. 
-    (thumnail 생성 resizing 비동기작업 실행 전 은 동기작업으로 진행합니다.)
+    (thumnail 생성 (resizing 비동기작업 실행 전) 은 동기 작업으로 진행합니다.)
   + client에서는 성공 응답을 받으면 매 1초 마다 progress 상태를 확인할 수 있는 request를 지속적으로 전송합니다.
   + 먼저 thumbnail 에 대한 progress를 확인 후 thumbnail 작업이 완료된 것을 client에서 확인하면 resizing progress를 확인하는 요청을 매 1초마다 전송합니다.
   + thumbnail progress 및 resizing progress가 100%가 되면 videoId를 이용하여 video 정보를 요청하고, 이를 통해 브라우저에서는 thumbnail과 리사이징된 영상을 불러와 load합니다.
